@@ -1,0 +1,13 @@
+# Preface {.unnumbered}
+
+Most people do not meet the mathematics behind machine learning. They meet its symbols. A formula appears, already assembled, and the task is to accept it and move on. The reason anyone would ever have written that formula down, is left as something you are supposed to absorb later, or never. This book is an attempt at the opposite: to arrive at every formula only once you already feel why you want it.
+
+The idea is simple. Before a symbol appears, there is a picture. Before the picture, there is a problem you can actually feel, and is always something concrete enough to be irritating. We start from the itch, build the picture that resolves it, and only then write down the mathematics, so that the formula reads as the inevitable end of a story rather than the start of one. Nothing is asserted that has not first been made to feel obvious, and nothing is left as magic.
+
+Three commitments run through every chapter. No notation arrives before the reader wants it. Every major concept is implemented from scratch, in plain code you can run, with no library quietly doing the real work. And every idea is tied back to where it actually lives in machine learning, so you always know not just what a thing is, but what it is *for*, and what breaks when you get it wrong.
+
+The book is being written in the open, one part at a time, based on my own notes that I composed when I first started studying Machine Learning, and it will always be free to read. **Part 1, on linear algebra, is complete**: its twelve chapters carry you from what a vector is through to the singular value decomposition, the single most useful construction in the subject, and end by showing where the geometric intuition the whole part rests on quietly stops being reliable. Part 2 (calculus), Part 3 (probability and statistics), and Part 4, where all three come together into the mathematics of learning itself, are on the way.
+
+You do not need much to begin. School algebra, and the memory of having once seen a derivative, is enough. Beginners can lean on the warm-ups; readers who already know a section can skip ahead from its clearly marked opening. The book is meant to be read start to finish, but a finished Part 1 is already a complete resource on its own, so wherever you stop, nothing is wasted.
+
+A note on why this exists. Good mathematical intuition is not evenly distributed, and neither are the resources that build it: the best of them are often priced out of reach for exactly the people who would most benefit. This book stays free and online for that reason. If it helps you see why the formula works, it has done its job.

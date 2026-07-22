@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 200" font-family="Georgia, serif">
+  <defs>
+    <marker id="sgink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#141414"/>
+    </marker>
+    <marker id="sgpine" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B5E43"/>
+    </marker>
+  </defs>
+
+  <!-- PANEL 1: aligned, positive -->
+  <g>
+    <line x1="40" y1="150" x2="120" y2="150" stroke="#1B5E43" stroke-width="2.2" marker-end="url(#sgpine)"/>
+    <line x1="40" y1="150" x2="112" y2="118" stroke="#141414" stroke-width="2.4" marker-end="url(#sgink)"/>
+    <text x="78" y="185" font-size="20" fill="#4a4a4a" text-anchor="middle">+</text>
+  </g>
+
+  <!-- PANEL 2: right angle, zero -->
+  <g>
+    <line x1="200" y1="150" x2="280" y2="150" stroke="#1B5E43" stroke-width="2.2" marker-end="url(#sgpine)"/>
+    <line x1="200" y1="150" x2="200" y2="78" stroke="#141414" stroke-width="2.4" marker-end="url(#sgink)"/>
+    <path d="M 200 138 L 212 138 L 212 150" fill="none" stroke="#8a8a8a" stroke-width="1"/>
+    <text x="240" y="185" font-size="20" fill="#4a4a4a" text-anchor="middle">0</text>
+  </g>
+
+  <!-- PANEL 3: opposite lean, negative -->
+  <g>
+    <line x1="360" y1="150" x2="440" y2="150" stroke="#1B5E43" stroke-width="2.2" marker-end="url(#sgpine)"/>
+    <line x1="360" y1="150" x2="300" y2="112" stroke="#141414" stroke-width="2.4" marker-end="url(#sgink)"/>
+    <text x="384" y="185" font-size="20" fill="#4a4a4a" text-anchor="middle">−</text>
+  </g>
+</svg>

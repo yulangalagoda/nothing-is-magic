@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 260" font-family="Georgia, serif">
+  <defs>
+    <pattern id="cngrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#dcdcdc" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="460" height="260" fill="url(#cngrid)"/>
+
+  <!-- a square centred at (110,140), half-side 60 -->
+  <rect x="50" y="80" width="120" height="120" fill="#1B5E43" fill-opacity="0.05" stroke="#141414" stroke-width="1.5"/>
+  <circle cx="110" cy="140" r="2.5" fill="#141414"/>
+
+  <!-- face distance: centre to middle of right edge -->
+  <line x1="110" y1="140" x2="170" y2="140" stroke="#1B5E43" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="140" y="132" font-size="11" fill="#1B5E43" text-anchor="middle">1</text>
+
+  <!-- corner distance: centre to top-right corner -->
+  <line x1="110" y1="140" x2="170" y2="80" stroke="#141414" stroke-width="2"/>
+  <text x="150" y="105" font-size="11" fill="#141414">√2 ≈ 1.41</text>
+
+  <!-- the growth note on the right -->
+  <text x="250" y="70" font-size="12" fill="#4a4a4a">corner distance grows</text>
+  <text x="250" y="88" font-size="12" fill="#4a4a4a">with dimension:</text>
+  <text x="260" y="118" font-size="12" fill="#141414">2D:  √2  ≈ 1.41</text>
+  <text x="260" y="140" font-size="12" fill="#141414">3D:  √3  ≈ 1.73</text>
+  <text x="260" y="162" font-size="12" fill="#141414">10D:  √10 ≈ 3.16</text>
+  <text x="260" y="184" font-size="12" fill="#141414">300D: √300 ≈ 17.3</text>
+  <text x="250" y="214" font-size="11" fill="#4a4a4a" font-style="italic">faces stay at 1; corners race away</text>
+</svg>

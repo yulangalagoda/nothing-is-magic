@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 260" font-family="Georgia, serif">
+  <defs>
+    <marker id="daink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#141414"/>
+    </marker>
+    <marker id="dapine" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B5E43"/>
+    </marker>
+    <pattern id="dagrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#dcdcdc" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="460" height="260" fill="url(#dagrid)"/>
+
+  <!-- LEFT: unit square -->
+  <text x="100" y="30" font-size="12" fill="#4a4a4a" text-anchor="middle">unit square, area 1</text>
+  <rect x="70" y="150" width="50" height="-50" transform="translate(0,50)" fill="#1B5E43" fill-opacity="0.08"/>
+  <rect x="70" y="150" width="50" height="50" fill="#1B5E43" fill-opacity="0.08" stroke="none"/>
+  <circle cx="70" cy="200" r="2.5" fill="#141414"/>
+  <line x1="70" y1="200" x2="120" y2="200" stroke="#141414" stroke-width="2.2" marker-end="url(#daink)"/>
+  <line x1="70" y1="200" x2="70" y2="150" stroke="#1B5E43" stroke-width="2.2" marker-end="url(#dapine)"/>
+
+  <text x="230" y="150" font-size="16" fill="#9a9a9a" text-anchor="middle">→</text>
+
+  <!-- RIGHT: parallelogram, area 3 -->
+  <text x="360" y="30" font-size="12" fill="#4a4a4a" text-anchor="middle">parallelogram, area 3</text>
+  <polygon points="300,200 400,200 430,110 330,110" fill="#1B5E43" fill-opacity="0.10" stroke="none"/>
+  <circle cx="300" cy="200" r="2.5" fill="#141414"/>
+  <line x1="300" y1="200" x2="400" y2="200" stroke="#141414" stroke-width="2.2" marker-end="url(#daink)"/>
+  <line x1="300" y1="200" x2="330" y2="110" stroke="#1B5E43" stroke-width="2.2" marker-end="url(#dapine)"/>
+  <text x="365" y="165" font-size="15" fill="#4a4a4a" text-anchor="middle" font-style="italic">det = 3</text>
+</svg>

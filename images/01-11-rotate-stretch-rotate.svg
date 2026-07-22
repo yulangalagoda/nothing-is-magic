@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 200" font-family="Georgia, serif">
+  <defs>
+    <pattern id="svdgrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#ececec" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+
+  <!-- STAGE 1: original circle with two marked directions -->
+  <text x="55" y="25" font-size="10" fill="#4a4a4a" text-anchor="middle">start</text>
+  <circle cx="55" cy="110" r="32" fill="#1B5E43" fill-opacity="0.06" stroke="#141414" stroke-width="1.5"/>
+  <line x1="55" y1="110" x2="87" y2="110" stroke="#141414" stroke-width="1.8"/>
+  <line x1="55" y1="110" x2="55" y2="78" stroke="#1B5E43" stroke-width="1.8"/>
+
+  <text x="112" y="105" font-size="14" fill="#9a9a9a" text-anchor="middle">→</text>
+  <text x="112" y="122" font-size="8" fill="#9a9a9a" text-anchor="middle">turn (Vᵀ)</text>
+
+  <!-- STAGE 2: rotated circle (directions now on the axes) -->
+  <text x="165" y="25" font-size="10" fill="#4a4a4a" text-anchor="middle">rotated</text>
+  <circle cx="165" cy="110" r="32" fill="#1B5E43" fill-opacity="0.06" stroke="#141414" stroke-width="1.5"/>
+  <line x1="165" y1="110" x2="197" y2="110" stroke="#141414" stroke-width="1.8"/>
+  <line x1="165" y1="110" x2="165" y2="78" stroke="#1B5E43" stroke-width="1.8"/>
+
+  <text x="222" y="105" font-size="14" fill="#9a9a9a" text-anchor="middle">→</text>
+  <text x="222" y="122" font-size="8" fill="#9a9a9a" text-anchor="middle">stretch (Σ)</text>
+
+  <!-- STAGE 3: ellipse (stretched along axes) -->
+  <text x="285" y="25" font-size="10" fill="#4a4a4a" text-anchor="middle">stretched</text>
+  <ellipse cx="285" cy="110" rx="45" ry="22" fill="#1B5E43" fill-opacity="0.06" stroke="#141414" stroke-width="1.5"/>
+  <line x1="285" y1="110" x2="330" y2="110" stroke="#141414" stroke-width="1.8"/>
+  <line x1="285" y1="110" x2="285" y2="88" stroke="#1B5E43" stroke-width="1.8"/>
+
+  <text x="352" y="105" font-size="14" fill="#9a9a9a" text-anchor="middle">→</text>
+  <text x="352" y="122" font-size="8" fill="#9a9a9a" text-anchor="middle">turn (U)</text>
+
+  <!-- STAGE 4: rotated ellipse (final) -->
+  <text x="415" y="25" font-size="10" fill="#4a4a4a" text-anchor="middle">final</text>
+  <g transform="rotate(-28 415 110)">
+    <ellipse cx="415" cy="110" rx="45" ry="22" fill="#1B5E43" fill-opacity="0.10" stroke="#141414" stroke-width="1.5"/>
+    <line x1="415" y1="110" x2="460" y2="110" stroke="#141414" stroke-width="1.8"/>
+    <line x1="415" y1="110" x2="415" y2="88" stroke="#1B5E43" stroke-width="1.8"/>
+  </g>
+</svg>
