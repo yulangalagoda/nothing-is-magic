@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b687d2e570ee777d37fd4aa2c902886a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,6 +107,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -138,7 +141,6 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -265,7 +267,7 @@ window.Quarto = {
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
-  <ul>
+  <ul class="collapse">
   <li><a href="#the-itch" id="toc-the-itch" class="nav-link active" data-scroll-target="#the-itch">The itch</a></li>
   <li><a href="#the-picture" id="toc-the-picture" class="nav-link" data-scroll-target="#the-picture">The picture</a></li>
   <li><a href="#the-math-built-up" id="toc-the-math-built-up" class="nav-link" data-scroll-target="#the-math-built-up">The math, built up</a></li>
@@ -274,7 +276,7 @@ window.Quarto = {
   <li><a href="#common-misunderstandings" id="toc-common-misunderstandings" class="nav-link" data-scroll-target="#common-misunderstandings">Common misunderstandings</a></li>
   <li><a href="#check-your-intuition" id="toc-check-your-intuition" class="nav-link" data-scroll-target="#check-your-intuition">Check your intuition</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-11-svd.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-11-svd.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -337,7 +339,7 @@ A = U \Sigma V^{T},
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>NumPy computes the whole decomposition in one call, and we can confirm both that it rebuilds the original matrix and that the singular values say what we claimed.</p>
 <p>Take a matrix and decompose it:</p>
-<div id="2b722d3e" class="cell" data-execution_count="1">
+<div id="d3c40368" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="fl">3.0</span>, <span class="fl">1.0</span>],</span>
@@ -359,7 +361,7 @@ Vt:
 </div>
 <p>The singular values come back in <code>S</code>, ordered largest first. <code>U</code> and <code>Vt</code> are the two rotations, the output directions and the transposed input directions. Notice <code>S</code> is returned as just the list of singular values, not the full diagonal matrix, since storing the zeros would be wasteful; we rebuild the diagonal when we need it.</p>
 <p>Confirm the three moves really do reassemble the original transformation. We put the singular values onto a diagonal and multiply the three factors back together, turn then stretch then turn:</p>
-<div id="1d52d99a" class="cell" data-execution_count="2">
+<div id="47ee09e9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Sigma <span class="op">=</span> np.diag(S)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>reconstructed <span class="op">=</span> U <span class="op">@</span> Sigma <span class="op">@</span> Vt</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reconstructed)</span>
@@ -372,7 +374,7 @@ True</code></pre>
 </div>
 <p>The product returns the original matrix, and <code>np.allclose</code> confirms it, allowing for the faint floating-point dust these computations always leave. The three simple moves, composed, are exactly the matrix we started with.</p>
 <p>Now watch the singular values expose rank. Here is a matrix that secretly collapses space, its second column twice the first:</p>
-<div id="0d0cc0ab" class="cell" data-execution_count="3">
+<div id="91ac4c7e" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>collapse <span class="op">=</span> np.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>],</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                     [<span class="fl">2.0</span>, <span class="fl">4.0</span>]])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>U, S, Vt <span class="op">=</span> np.linalg.svd(collapse)</span>
@@ -383,7 +385,7 @@ True</code></pre>
 </div>
 <p>One singular value is substantial and the other is essentially zero, a speck of floating-point dust where a true zero should be. One non-zero stretch means rank one: the transformation stretches a single direction and squashes the other flat, exactly the collapse we detected before with determinant and rank, now visible as a stretch amount that fell to zero. The singular values saw the collapse the same way every other tool did.</p>
 <p>Finally, a first taste of compression, keeping the strong stretch and discarding the weak one. We take a matrix, decompose it, and rebuild it using only its largest singular value, throwing the smaller away:</p>
-<div id="7c47c040" class="cell" data-execution_count="4">
+<div id="31dd958a" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="fl">4.0</span>, <span class="fl">1.0</span>],</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>              [<span class="fl">2.0</span>, <span class="fl">3.0</span>]])</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>U, S, Vt <span class="op">=</span> np.linalg.svd(A)</span>
