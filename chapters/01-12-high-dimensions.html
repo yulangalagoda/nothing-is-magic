@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -323,7 +323,7 @@ window.Quarto = {
 <h2 class="unnumbered anchored" data-anchor-id="measure-it-yourself">Measure it yourself</h2>
 <p>Rather than build a tool, let us watch the intuition break with our own code, by measuring high-dimensional space and comparing what we find to what the room in our heads expects.</p>
 <p>First, the claim that random points drift to the edges. We scatter points at random inside a cube in growing numbers of dimensions and measure their distance from the centre. If the room in our head were right, plenty should sit near the middle, near distance zero:</p>
-<div id="8c66e4ad" class="cell" data-execution_count="1">
+<div id="e8fb18bb" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
@@ -341,7 +341,7 @@ window.Quarto = {
 </div>
 <p>In two dimensions the average distance from the centre is small; the middle is a normal place to be. As the dimensions climb, the average distance grows steadily, and the fraction of points anywhere near the centre falls toward nothing. The points have drifted outward exactly as promised, and the higher we go the emptier the middle becomes.</p>
 <p>Now the stranger claim, that distances between points stop varying. We take many random points in high dimensions, measure all the distances between pairs, and look at how much those distances differ from one another:</p>
-<div id="191606c5" class="cell" data-execution_count="2">
+<div id="c7077440" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> [<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>]:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    points <span class="op">=</span> rng.random((<span class="dv">500</span>, dim))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># distances from the first point to all others</span></span>

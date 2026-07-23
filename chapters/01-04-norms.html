@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -358,7 +358,7 @@ Figure&nbsp;4.2: Distance one from the origin, drawn for each norm. Under L2 it 
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>Both norms are short in NumPy, and building each by hand first shows there is nothing to either one but the formula.</p>
 <p>Take a vector and compute its L2 norm the long way, squaring, summing, rooting, exactly as we did in the first chapter:</p>
-<div id="1f0d1459" class="cell" data-execution_count="1">
+<div id="2d13283c" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">3.0</span>, <span class="op">-</span><span class="fl">4.0</span>])</span>
@@ -370,7 +370,7 @@ Figure&nbsp;4.2: Distance one from the origin, drawn for each norm. Under L2 it 
 </div>
 </div>
 <p>Five, the crow’s distance, and notice it did not care that the second number was negative: squaring removed the sign along the way. Now the L1 norm by hand, taking the size of each number and adding:</p>
-<div id="25fd4693" class="cell" data-execution_count="2">
+<div id="09264d8c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>l1_by_hand <span class="op">=</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(v))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(l1_by_hand)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -379,7 +379,7 @@ Figure&nbsp;4.2: Distance one from the origin, drawn for each norm. Under L2 it 
 </div>
 <p>Seven, the pedestrian’s distance. <code>np.abs</code> throws the signs away, three and four, and the sum is seven. Two numbers from the same vector, five and seven, the same pair we drew.</p>
 <p>NumPy gives both through one function, <code>np.linalg.norm</code>, steered by an argument called <code>ord</code> that picks which norm. Left alone it gives L2, the default we have been leaning on:</p>
-<div id="71de177c" class="cell" data-execution_count="3">
+<div id="a7264f4d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v))        <span class="co"># L2, the default</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">2</span>))     <span class="co"># L2, asked for explicitly</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">1</span>))     <span class="co"># L1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -391,7 +391,7 @@ Figure&nbsp;4.2: Distance one from the origin, drawn for each norm. Under L2 it 
 </div>
 <p>The first two both print five, the same number, one by default and one by request. The third prints seven. The single argument is the whole difference between the crow and the pedestrian, and it lines up with the subscript from the last section: <code>ord=1</code> is <span class="math inline">\(\lVert \mathbf{v} \rVert_1\)</span>, <code>ord=2</code> is <span class="math inline">\(\lVert \mathbf{v} \rVert_2\)</span>.</p>
 <p>It is worth confirming, once, that the built-in really is doing our two hand formulas and nothing more:</p>
-<div id="4c63fff0" class="cell" data-execution_count="4">
+<div id="b361f599" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">2</span>) <span class="op">==</span> l2_by_hand)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">1</span>) <span class="op">==</span> l1_by_hand)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">

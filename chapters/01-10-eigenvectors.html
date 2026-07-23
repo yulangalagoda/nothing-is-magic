@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -342,7 +342,7 @@ A\mathbf{v} = \lambda \mathbf{v}.
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>Finding eigenvectors by hand is laborious, but NumPy does it in one call, and we can verify the survivor-direction picture directly.</p>
 <p>Take the horizontal stretch from the picture, tripling the first axis and leaving the second:</p>
-<div id="cde3771f" class="cell" data-execution_count="1">
+<div id="f190a288" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="fl">3.0</span>, <span class="fl">0.0</span>],</span>
@@ -359,7 +359,7 @@ A\mathbf{v} = \lambda \mathbf{v}.
 </div>
 <p>The eigenvalues come back as three and one, the two stretch factors we reasoned out. The eigenvectors are returned as the columns of the second array, and they are the horizontal and vertical directions, each written as a unit-length arrow. The transformation’s survivor directions are exactly the two axes, exactly as the picture promised.</p>
 <p>Now confirm the defining property directly: applying <span class="math inline">\(A\)</span> to an eigenvector should equal simply scaling that eigenvector by its eigenvalue. Take the first eigenvector and its eigenvalue and check both sides of <span class="math inline">\(A\mathbf{v} = \lambda\mathbf{v}\)</span>:</p>
-<div id="ad92acc1" class="cell" data-execution_count="2">
+<div id="945d169d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> vectors[:, <span class="dv">0</span>]           <span class="co"># first eigenvector</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lam <span class="op">=</span> values[<span class="dv">0</span>]             <span class="co"># its eigenvalue</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -372,7 +372,7 @@ A\mathbf{v} = \lambda \mathbf{v}.
 </div>
 <p>The two lines print the same vector. Applying the whole transformation to this direction did no more than scale it, which is what makes it an eigenvector. The arrow was not turned, only stretched.</p>
 <p>Watch a turned direction fail the same test. A diagonal vector is not an eigenvector of this transformation, so applying <span class="math inline">\(A\)</span> to it should not give a mere scaling:</p>
-<div id="3a1b4d7c" class="cell" data-execution_count="3">
+<div id="c9db34b2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">1.0</span>])    <span class="co"># a diagonal direction</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A <span class="op">@</span> d)                <span class="co"># becomes [3, 1]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -381,7 +381,7 @@ A\mathbf{v} = \lambda \mathbf{v}.
 </div>
 <p>The diagonal <span class="math inline">\([1, 1]\)</span> becomes <span class="math inline">\([3, 1]\)</span>, which does not point the same way as <span class="math inline">\([1, 1]\)</span>; the direction was turned, pulled flatter. No single number scales <span class="math inline">\([1, 1]\)</span> into <span class="math inline">\([3, 1]\)</span>, which is precisely what it means for a direction to fail to be an eigenvector.</p>
 <p>And the rotation with no survivors behaves as the picture warned. A quarter-turn turns every direction, so it should have no real eigenvectors:</p>
-<div id="01182b0e" class="cell" data-execution_count="4">
+<div id="45f755f1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.array([[<span class="fl">0.0</span>, <span class="op">-</span><span class="fl">1.0</span>],</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>              [<span class="fl">1.0</span>,  <span class="fl">0.0</span>]])</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.eig(R).eigenvalues)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

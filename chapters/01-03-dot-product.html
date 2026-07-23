@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -402,7 +402,7 @@ Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product i
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>The dot product is a sum of matching products, and that is exactly as short in NumPy as it sounds.</p>
 <p>Start with two vectors and form it by hand, the way the formula reads: multiply matching slots, then add:</p>
-<div id="b821b751" class="cell" data-execution_count="1">
+<div id="c2aa35bf" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">2.0</span>, <span class="fl">1.0</span>])</span>
@@ -417,7 +417,7 @@ Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product i
 </div>
 </div>
 <p><code>v * w</code> multiplies slot by slot, giving <code>[2.0, 3.0]</code>, and summing those gives <code>5.0</code>. That is <span class="math inline">\(2\cdot1 + 1\cdot3\)</span>, the dot product spelled out in two steps. NumPy also has it as one built-in:</p>
-<div id="8b5b1810" class="cell" data-execution_count="2">
+<div id="1bf16ba3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.dot(v, w))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5.0</code></pre>
@@ -426,7 +426,7 @@ Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product i
 <p>Same <code>5.0</code>. <code>np.dot</code> multiplies the matching slots and adds them, nothing more, exactly what we did above.</p>
 <p>Now let us confirm the three faces from the last section, in code, one at a time.</p>
 <p><strong>Length.</strong> The dot product of a vector with itself should be its length squared:</p>
-<div id="8ea052d8" class="cell" data-execution_count="3">
+<div id="a8295467" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.dot(v, v))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v) <span class="op">**</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -436,7 +436,7 @@ Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product i
 </div>
 <p>Both give <code>5.0</code>. The self-dot and the squared length are the same number, as promised.</p>
 <p><strong>The right-angle test.</strong> Two perpendicular vectors should give a dot product of zero. Take <span class="math inline">\([1, 0]\)</span> and <span class="math inline">\([0, 1]\)</span>, which point straight along the two axes:</p>
-<div id="198855ab" class="cell" data-execution_count="4">
+<div id="3aa257b1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">0.0</span>])</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.array([<span class="fl">0.0</span>, <span class="fl">1.0</span>])</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.dot(a, b))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -446,7 +446,7 @@ Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product i
 </div>
 <p>Zero, with no angle measured and no trigonometry. The sum of products came out to zero on its own, and that is the whole test.</p>
 <p><strong>The angle.</strong> We can run the tangled relation backwards to pull the actual angle out. Since <span class="math inline">\(\mathbf{v} \cdot \mathbf{w} = \lVert \mathbf{v} \rVert \lVert \mathbf{w} \rVert \cos\theta\)</span>, we divide the dot product by the two lengths to get <span class="math inline">\(\cos\theta\)</span>, then undo the cosine:</p>
-<div id="d45f5258" class="cell" data-execution_count="5">
+<div id="fb782159" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cos_theta <span class="op">=</span> np.dot(v, w) <span class="op">/</span> (np.linalg.norm(v) <span class="op">*</span> np.linalg.norm(w))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.arccos(cos_theta)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -481,7 +481,7 @@ Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product i
 <p><strong>A dot product of zero does not mean “unrelated” in meaning.</strong> We built the clean fact that a zero dot product means the arrows are perpendicular. It is easy to slide from “perpendicular” to “nothing to do with each other,” but those are not the same claim. Perpendicular is a statement about direction in the vector space, nothing more. Two word vectors might come out perpendicular, dot product zero, and still be deeply related in meaning in ways the particular vectors simply do not capture. The dot product reports on the geometry we built, faithfully. Whether that geometry captures the meaning we care about is a separate question, and a much harder one.</p>
 <p><strong>Stripping the lengths is not always what you want.</strong> Cosine similarity divides out both lengths to get the pure angle, and for comparing songs or documents that is right, because length was contaminating the answer. But the length is not always noise. Sometimes how <em>much</em> of something there is genuinely matters, and throwing the lengths away throws real information away with them. Cosine similarity is the right tool when direction is what carries meaning and size does not. Deciding which of those you are in is a judgement about your data, not something the formula makes for you.</p>
 <p><strong><code>arccos</code> can hand you a <code>nan</code>.</strong> When you recover an angle by dividing the dot product by the two lengths and calling <code>arccos</code>, the arithmetic can bite. In exact maths, <span class="math inline">\(\cos\theta\)</span> for two vectors always lands between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span>. In floating point it can drift a hair outside that range from rounding alone, and the drift goes either way. Take a vector, scale it to length one, and dot it with itself. The true answer is exactly one, a vector makes a zero angle with itself, but the machine does not always land exactly there:</p>
-<div id="ae715c09" class="cell" data-execution_count="6">
+<div id="7b2070be" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">1.0</span>])</span>
@@ -494,18 +494,18 @@ Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product i
 </div>
 </div>
 <p>That last digit is the whole problem. Feed a value above one to <code>arccos</code>, which is undefined there, and it does not raise an error. It returns <code>nan</code>, the quiet not-a-number that then poisons everything downstream:</p>
-<div id="5c75786c" class="cell" data-execution_count="7">
+<div id="efff8b12" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.arccos(cos_theta))         <span class="co"># nan</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>nan</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_35881/334907105.py:1: RuntimeWarning: invalid value encountered in arccos
+<pre><code>/tmp/ipykernel_48574/334907105.py:1: RuntimeWarning: invalid value encountered in arccos
   print(np.arccos(cos_theta))         # nan</code></pre>
 </div>
 </div>
 <p>This is the same approximate-arithmetic issue from the first chapter, surfacing in a new place. The standard guard is to clip the value back into range before taking the inverse cosine:</p>
-<div id="d280c7ef" class="cell" data-execution_count="8">
+<div id="547047fa" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.arccos(np.clip(cos_theta, <span class="op">-</span><span class="fl">1.0</span>, <span class="fl">1.0</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.degrees(theta))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">

@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -351,14 +351,14 @@ c_1 = c_2 = \cdots = c_k = 0.
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>Independence, rank, and dimension all come down to counting genuinely independent directions, and NumPy will count them for us. But first let us catch a dependent set in the act, the way the definition describes.</p>
 <p>Here are two vectors on the same line, the second a clean multiple of the first:</p>
-<div id="e61db191" class="cell" data-execution_count="1">
+<div id="80ff17c2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v1 <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>])</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>v2 <span class="op">=</span> np.array([<span class="fl">3.0</span>, <span class="fl">6.0</span>])     <span class="co"># exactly 3 * v1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The definition said a set is dependent when some combination, with amounts not all zero, reaches the zero vector. Here we can see the amounts by eye: three of <span class="math inline">\(v_1\)</span> minus one of <span class="math inline">\(v_2\)</span> cancels to nothing.</p>
-<div id="7cfc843e" class="cell" data-execution_count="2">
+<div id="975e53cf" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">3</span> <span class="op">*</span> v1 <span class="op">-</span> <span class="dv">1</span> <span class="op">*</span> v2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[0. 0.]</code></pre>
@@ -366,7 +366,7 @@ c_1 = c_2 = \cdots = c_k = 0.
 </div>
 <p>Zero, and the amounts were <span class="math inline">\(3\)</span> and <span class="math inline">\(-1\)</span>, not both zero. That non-trivial path to the origin is dependence, caught in the act. For an independent pair no such non-zero amounts exist; only <span class="math inline">\(0\)</span> and <span class="math inline">\(0\)</span> would land on zero.</p>
 <p>Counting the independent directions in a set is exactly what rank measures, and NumPy computes it directly:</p>
-<div id="52255f03" class="cell" data-execution_count="3">
+<div id="e2cb6ab9" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dependent <span class="op">=</span> np.column_stack([v1, v2])</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.matrix_rank(dependent))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -374,7 +374,7 @@ c_1 = c_2 = \cdots = c_k = 0.
 </div>
 </div>
 <p>Rank one. Two vectors written down, but only one independent direction between them, because the second was a passenger. Now an independent pair:</p>
-<div id="b2ad6592" class="cell" data-execution_count="4">
+<div id="315ef8ba" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>])</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>w2 <span class="op">=</span> np.array([<span class="fl">2.0</span>, <span class="fl">1.0</span>])     <span class="co"># not a multiple of w1</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>independent <span class="op">=</span> np.column_stack([w1, w2])</span>
@@ -385,7 +385,7 @@ c_1 = c_2 = \cdots = c_k = 0.
 </div>
 <p>Rank two. Two vectors, two genuine directions, no passengers, so these two form a basis for the plane. The rank matching the number of vectors is the signal that a set is independent.</p>
 <p>The same tool sees through a bigger, more deceptive case. Here are three vectors in three-dimensional space, and at a glance they look independent, three different-looking lists:</p>
-<div id="5dd820a5" class="cell" data-execution_count="5">
+<div id="bf67b122" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.array([<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>])</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>])     <span class="co"># a + b, a hidden passenger</span></span>

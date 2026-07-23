@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -361,7 +361,7 @@ A\mathbf{v} = 3 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + 2 \begin{bmatrix} 1 \\ 1 
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>A matrix in NumPy is an array of rows, and applying it to a vector is a single operator. But the point of this chapter is the meaning, so we will compute the transformation both ways, by the column recipe and by the built-in, and watch them agree.</p>
 <p>First, build the shear matrix. NumPy takes it row by row, so we type the two rows even though we have been thinking in columns:</p>
-<div id="e5dfcff1" class="cell" data-execution_count="1">
+<div id="25accce5" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">1</span>],</span>
@@ -374,7 +374,7 @@ A\mathbf{v} = 3 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + 2 \begin{bmatrix} 1 \\ 1 
 </div>
 <p>Keep the columns in mind as you read it. The first column, top-to-bottom, is <code>[1, 0]</code>, where the first basis vector landed. The second column is <code>[1, 1]</code>, where the second landed. NumPy stores it as rows on the page, but the transformation lives in the columns.</p>
 <p>Now apply it to <span class="math inline">\([3, 2]\)</span> the meaningful way, as a linear combination of the columns, scaling each column by the matching entry of the vector and adding:</p>
-<div id="9fabc3c1" class="cell" data-execution_count="2">
+<div id="d201115f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="dv">3</span>, <span class="dv">2</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>col1 <span class="op">=</span> A[:, <span class="dv">0</span>]      <span class="co"># first column: where [1,0] went</span></span>
@@ -388,14 +388,14 @@ A\mathbf{v} = 3 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + 2 \begin{bmatrix} 1 \\ 1 
 </div>
 <p>The answer is <code>[5, 2]</code>, the landing spot we worked out by hand. <code>A[:, 0]</code> pulls out the first column and <code>A[:, 1]</code> the second, and the line <code>v[0] * col1 + v[1] * col2</code> is the recipe read aloud: three of the first column plus two of the second. Nothing here is matrix magic. It is the linear combination from the second chapter, run on the columns of <code>A</code>.</p>
 <p>NumPy has the operation built in, written with the <code>@</code> symbol:</p>
-<div id="313ea587" class="cell" data-execution_count="3">
+<div id="af3649c4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A <span class="op">@</span> v)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[5 2]</code></pre>
 </div>
 </div>
 <p>Same <code>[5, 2]</code>. The <code>@</code> is matrix application, and it is doing exactly the column recipe we just wrote out by hand, however it organises the arithmetic internally. We can put the two side by side to be sure:</p>
-<div id="fe3afa7c" class="cell" data-execution_count="4">
+<div id="b5860b33" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array_equal(v[<span class="dv">0</span>] <span class="op">*</span> A[:, <span class="dv">0</span>] <span class="op">+</span> v[<span class="dv">1</span>] <span class="op">*</span> A[:, <span class="dv">1</span>], A <span class="op">@</span> v))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>
@@ -403,7 +403,7 @@ A\mathbf{v} = 3 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + 2 \begin{bmatrix} 1 \\ 1 
 </div>
 <p><code>True</code>. The meaning and the machine agree: applying a matrix is combining its columns.</p>
 <p>To feel the transformation as motion rather than a single answer, apply the same matrix to several vectors and watch where they go:</p>
-<div id="3baf18d0" class="cell" data-execution_count="5">
+<div id="2c124953" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">0</span>],</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                   [<span class="dv">0</span>, <span class="dv">1</span>],</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                   [<span class="dv">1</span>, <span class="dv">1</span>],</span>
@@ -434,7 +434,7 @@ A\mathbf{v} = 3 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + 2 \begin{bmatrix} 1 \\ 1 
 <h2 class="unnumbered anchored" data-anchor-id="common-misunderstandings">Common misunderstandings</h2>
 <p>Matrices attract more confusion than anything so far, mostly because the notation invites you to forget they are transformations.</p>
 <p><strong>In NumPy, <code>*</code> is not matrix application.</strong> This is the direct cousin of the trap from the dot product chapter, and it bites just as often. The matrix operator is <code>@</code>. The star, <code>A * v</code>, does something else entirely: it multiplies elementwise, matching up entries and broadcasting, and it will happily return a wrong answer without any error. Watch the two disagree:</p>
-<div id="f246aac8" class="cell" data-execution_count="6">
+<div id="980a3955" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">1</span>],</span>

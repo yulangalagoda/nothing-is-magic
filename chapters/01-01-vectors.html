@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -371,7 +371,7 @@ Figure&nbsp;1.1: One song, two numbers, one arrow.
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>We have now found the length of an arrow in two ways, once with a ruler on squared paper and once with Pythagoras on paper. The point all along was to find it without the ruler, so let us hand the job to a machine and watch it do the same thing.</p>
 <p>First we make the vector:</p>
-<div id="8d8bc00b" class="cell" data-execution_count="1">
+<div id="e4e43b97" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
@@ -382,7 +382,7 @@ Figure&nbsp;1.1: One song, two numbers, one arrow.
 </div>
 <p>It is worth pausing on what we actually gave the computer. We did not give it an arrow; we gave it a list, three then four, in that order. The machine has no picture of this and never will. It has the two numbers, and as we are about to see, the two numbers are all it needs.</p>
 <p>Now we compute the length exactly the way the formula reads, squaring each number, adding the results, and taking the root:</p>
-<div id="5fc68d3b" class="cell" data-execution_count="2">
+<div id="9d1b2746" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>squared <span class="op">=</span> v <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> np.<span class="bu">sum</span>(squared)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>length <span class="op">=</span> np.sqrt(total)</span>
@@ -398,14 +398,14 @@ Figure&nbsp;1.1: One song, two numbers, one arrow.
 </div>
 <p>Each line here is one piece of <span class="math inline">\(\sqrt{v_1^2 + v_2^2}\)</span>. The squares come out as 9 and 16, they add up to 25, and the root of 25 is 5.0. We have done the arithmetic ourselves, step by step, with nothing hidden.</p>
 <p>NumPy also offers the length as a single ready-made function:</p>
-<div id="33f88a74" class="cell" data-execution_count="3">
+<div id="8e30b441" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5.0</code></pre>
 </div>
 </div>
 <p>The answer is the same. The word <code>norm</code> is just the mathematician’s term for length, and this function is doing precisely what we did by hand a moment ago: squaring, summing, and rooting. It is not doing anything cleverer than that. Since that claim is easy to check, let us have the machine check it for us:</p>
-<div id="1889aa33" class="cell" data-execution_count="4">
+<div id="5c849704" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.sqrt(np.<span class="bu">sum</span>(v <span class="op">**</span> <span class="dv">2</span>)) <span class="op">==</span> np.linalg.norm(v))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>
@@ -413,7 +413,7 @@ Figure&nbsp;1.1: One song, two numbers, one arrow.
 </div>
 <p>It comes back <code>True</code>, which tells us the library and the formula really are the same thing. (We will find, a little later, that this kind of exact check is not always as trustworthy as it looks here. For now it holds, and it makes the point.)</p>
 <p>Now for the part that matters. Here is a vector with three hundred numbers in it, which is much closer to what a real song actually is. We cannot draw it, we cannot picture it, and we would not know where to begin if we tried:</p>
-<div id="6c08af0c" class="cell" data-execution_count="5">
+<div id="f1d3dbd0" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>big <span class="op">=</span> rng.random(<span class="dv">300</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -448,7 +448,7 @@ Figure&nbsp;1.1: One song, two numbers, one arrow.
 <p><strong>The numbers describe the arrow, not the other way round.</strong> Our song was <span class="math inline">\([128, 7]\)</span> when we measured tempo in beats per minute. Measure tempo in beats per second instead and the very same song becomes <span class="math inline">\([2.13, 7]\)</span>. Every number in every vector in the dataset has shifted, and yet not a single song has changed. The arrow is the real thing; the list is only a description of it under a convention we happened to pick, and the instant we pick a different convention, the numbers move. It is worth remembering this the next time some numbers look strange: suspect the convention before you suspect the data.</p>
 <p><strong>Set aside “magnitude and direction.”</strong> Anyone who met vectors in school physics was told a vector is a thing with a magnitude and a direction, like a force or a velocity. That is a perfectly good picture for arrows in the physical world, but it can mislead us here. It puts direction and length first, as though they were what the vector truly is, and treats the numbers as a readout that comes second. In machine learning the order is reversed. The numbers come first. They are handed to us hundreds at a time, and most of them measure nothing we could ever point to. Direction and length are not what such a vector is; they are things we compute from its numbers when we happen to need them. A word embedding has no direction that anyone chose. It has a few hundred numbers, and a direction falls out of them if we ask for one.</p>
 <p><strong>The machine’s arithmetic is not exact.</strong> A little earlier we asked the machine whether the formula and the library agreed:</p>
-<div id="be3b7bcc" class="cell" data-execution_count="6">
+<div id="1d45cd9b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.sqrt(np.<span class="bu">sum</span>(v <span class="op">**</span> <span class="dv">2</span>)) <span class="op">==</span> np.linalg.norm(v))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -457,7 +457,7 @@ Figure&nbsp;1.1: One song, two numbers, one arrow.
 </div>
 </div>
 <p>It answered <code>True</code>, and we should admit that this was partly luck. The numbers were clean and the two calculations happened to land on exactly the same value. In general, computers store most numbers as very close approximations rather than exact values, so two different routes to what should be “the same” answer can end up a hair apart. Ask for exact equality and you will sometimes get <code>False</code> for two quantities that are equal in every way you actually care about. The honest question is whether they are close enough:</p>
-<div id="cbd8ee36" class="cell" data-execution_count="7">
+<div id="4e12f9c5" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.isclose(np.sqrt(np.<span class="bu">sum</span>(v <span class="op">**</span> <span class="dv">2</span>)), np.linalg.norm(v)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>

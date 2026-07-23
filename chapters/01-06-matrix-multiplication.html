@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e02ef3edf67a37223265c342201cb8e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f4f3119add76ca10fa7a43495250ce55.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -347,7 +347,7 @@ AB = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 1 \end{bmatrix}
 <h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
 <p>The product is <code>@</code>, the same operator we used to apply a matrix to a vector, now between two matrices. But the point of this chapter is that the product is column-tracing, so we build it that way first and check the operator agrees.</p>
 <p>Here are the quarter-turn and the shear from the last section:</p>
-<div id="3063fa00" class="cell" data-execution_count="1">
+<div id="88ee9d99" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>],</span>
@@ -357,7 +357,7 @@ AB = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 1 \end{bmatrix}
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>, <span class="dv">1</span>]])      <span class="co"># shear</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We do <span class="math inline">\(B\)</span> first, then <span class="math inline">\(A\)</span>, so we want <span class="math inline">\(A\)</span> applied to each column of <span class="math inline">\(B\)</span>. Pull out <span class="math inline">\(B\)</span>’s columns and send each one through <span class="math inline">\(A\)</span>:</p>
-<div id="d9c1e6f8" class="cell" data-execution_count="2">
+<div id="ef452fb5" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>col1 <span class="op">=</span> A <span class="op">@</span> B[:, <span class="dv">0</span>]     <span class="co"># A applied to B's first column</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>col2 <span class="op">=</span> A <span class="op">@</span> B[:, <span class="dv">1</span>]     <span class="co"># A applied to B's second column</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -369,7 +369,7 @@ AB = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 1 \end{bmatrix}
 </div>
 </div>
 <p>The two landing spots, stacked as columns, give the combined matrix. Now the built-in product:</p>
-<div id="fa3e1ae9" class="cell" data-execution_count="3">
+<div id="db9f5499" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A <span class="op">@</span> B)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[ 0 -1]
@@ -377,7 +377,7 @@ AB = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 1 \end{bmatrix}
 </div>
 </div>
 <p>The same matrix. <code>A @ B</code> is doing exactly what we did by hand: applying <span class="math inline">\(A\)</span> to each column of <span class="math inline">\(B\)</span> and collecting the results as columns. We can put them side by side to be sure nothing differs:</p>
-<div id="5122a866" class="cell" data-execution_count="4">
+<div id="b8bfbe42" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array_equal(combined, A <span class="op">@</span> B))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>
@@ -385,7 +385,7 @@ AB = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 1 \end{bmatrix}
 </div>
 <p><code>True</code>. The operator and the column-tracing are one operation.</p>
 <p>Now see the order dependence directly. We do the two transformations in the other order, <span class="math inline">\(A\)</span> first then <span class="math inline">\(B\)</span>, which is the product <span class="math inline">\(B @ A\)</span>, and compare:</p>
-<div id="c29a1bdd" class="cell" data-execution_count="5">
+<div id="476906ff" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A <span class="op">@</span> B)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(B <span class="op">@</span> A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
