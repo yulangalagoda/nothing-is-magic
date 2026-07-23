@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 250" font-family="Georgia, serif">
+  <defs>
+    <marker id="tvink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#141414"/>
+    </marker>
+    <marker id="tvpine" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B5E43"/>
+    </marker>
+  </defs>
+
+  <!-- PANEL 1: arithmetic -->
+  <text x="80" y="40" font-size="12" fill="#4a4a4a" text-anchor="middle">the arithmetic</text>
+  <text x="80" y="118" font-size="15" fill="#141414" text-anchor="middle" font-style="italic">v · w</text>
+  <text x="80" y="150" font-size="12" fill="#4a4a4a" text-anchor="middle">= v₁w₁ + v₂w₂</text>
+
+  <!-- equals sign -->
+  <text x="158" y="120" font-size="22" fill="#8a8a8a" text-anchor="middle">=</text>
+
+  <!-- PANEL 2: geometry (shadow) -->
+  <text x="250" y="40" font-size="12" fill="#4a4a4a" text-anchor="middle">the geometry</text>
+  <circle cx="205" cy="150" r="2.5" fill="#141414"/>
+  <line x1="205" y1="150" x2="295" y2="150" stroke="#1B5E43" stroke-width="2.2" marker-end="url(#tvpine)"/>
+  <line x1="205" y1="150" x2="272" y2="95" stroke="#141414" stroke-width="2.4" marker-end="url(#tvink)"/>
+  <line x1="272" y1="95" x2="272" y2="150" stroke="#8a8a8a" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="205" y1="150" x2="272" y2="150" stroke="#1B5E43" stroke-width="4" opacity="0.28"/>
+  <text x="238" y="88" font-size="13" fill="#141414" text-anchor="middle" font-style="italic">v</text>
+  <text x="300" y="168" font-size="13" fill="#1B5E43" text-anchor="middle" font-style="italic">w</text>
+
+  <!-- arrow: strip lengths -->
+  <text x="345" y="112" font-size="18" fill="#8a8a8a" text-anchor="middle">→</text>
+  <text x="345" y="132" font-size="9" fill="#8a8a8a" text-anchor="middle">÷ lengths</text>
+
+  <!-- PANEL 3: angle -->
+  <text x="410" y="40" font-size="12" fill="#4a4a4a" text-anchor="middle">the angle</text>
+  <circle cx="385" cy="150" r="2.5" fill="#141414"/>
+  <line x1="385" y1="150" x2="440" y2="150" stroke="#1B5E43" stroke-width="2" marker-end="url(#tvpine)"/>
+  <line x1="385" y1="150" x2="428" y2="115" stroke="#141414" stroke-width="2" marker-end="url(#tvink)"/>
+  <path d="M 408 150 A 26 26 0 0 0 402 133" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+  <text x="415" y="140" font-size="12" fill="#4a4a4a">θ</text>
+  <text x="410" y="185" font-size="12" fill="#4a4a4a" text-anchor="middle">cos θ</text>
+</svg>

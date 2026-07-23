@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Matrix Multiplication as Composition – Nothing Is Magic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/01-07-independence-basis-rank.html" rel="next">
+<link href="../chapters/01-05-matrices.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b687d2e570ee777d37fd4aa2c902886a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-06-matrix-multiplication.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Matrix Multiplication as Composition</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Nothing Is Magic</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/yulangalagoda/nothing-is-magic" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-01-vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-02-adding-scaling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-03-dot-product.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-04-norms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-05-matrices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrices as Transformations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-06-matrix-multiplication.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Matrix Multiplication as Composition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-07-independence-basis-rank.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Basis, and Rank</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-08-determinant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Determinant</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-09-systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Systems of Equations, Geometrically</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-10-eigenvectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Eigenvectors and Eigenvalues</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-11-svd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Singular Value Decomposition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-12-high-dimensions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">High-Dimensional Space</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-itch" id="toc-the-itch" class="nav-link active" data-scroll-target="#the-itch">The itch</a></li>
+  <li><a href="#the-picture" id="toc-the-picture" class="nav-link" data-scroll-target="#the-picture">The picture</a></li>
+  <li><a href="#the-math-built-up" id="toc-the-math-built-up" class="nav-link" data-scroll-target="#the-math-built-up">The math, built up</a></li>
+  <li><a href="#build-it-yourself" id="toc-build-it-yourself" class="nav-link" data-scroll-target="#build-it-yourself">Build it yourself</a></li>
+  <li><a href="#where-it-lives-in-ml" id="toc-where-it-lives-in-ml" class="nav-link" data-scroll-target="#where-it-lives-in-ml">Where it lives in ML</a></li>
+  <li><a href="#common-misunderstandings" id="toc-common-misunderstandings" class="nav-link" data-scroll-target="#common-misunderstandings">Common misunderstandings</a></li>
+  <li><a href="#check-your-intuition" id="toc-check-your-intuition" class="nav-link" data-scroll-target="#check-your-intuition">Check your intuition</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-06-matrix-multiplication.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Matrix Multiplication as Composition</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-itch" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-itch">The itch</h2>
+<p>A single matrix moves space once. But we ended the last chapter noticing that a network does not move space once. It moves it again and again, matrix after matrix, each transformation handed the output of the one before. So the natural question is what happens when we chain two transformations together. Apply one matrix, then apply a second to the result. Two moves, back to back.</p>
+<p>We could always do this the slow way: take a vector, apply the first matrix, take the answer, apply the second matrix, and read off where it ends up. That works, but it treats the two-step process as something we have to walk through in full every time. It would be far better if the <em>pair</em> of transformations were itself a single transformation, one matrix that does in one move what the two did in two. Then a whole stack of layers could collapse, at least in principle, into one operation we understand all at once.</p>
+<p>It turns out the combination of two matrices is always itself a matrix, and finding it is what matrix multiplication actually is. Not a strange rule to memorise, but the answer to a concrete question: if I do this transformation and then that one, what single transformation have I done? That single combined transformation is the product of the two matrices, and this short chapter is about why it works the way it does.</p>
+</section>
+<section id="the-picture" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-picture">The picture</h2>
+<p>We already have everything we need to find the combined transformation, because we know the one fact that pins any transformation down: where the basis vectors land. A combined transformation is still a transformation, so it too is fixed entirely by where it sends the two basis vectors. We do not need to think about the infinitely many vectors in the plane. We need to follow two.</p>
+<p>So take the basis vector <span class="math inline">\([1, 0]\)</span> and push it through both moves in turn. First apply the earlier transformation and see where it goes. Then take that result and apply the later transformation to it. Wherever it ends up, after both moves, is where the <em>combined</em> transformation sends <span class="math inline">\([1, 0]\)</span>. Do the same for <span class="math inline">\([0, 1]\)</span>: push it through the first move, then the second, and note where it lands. Now we have both landing spots for the combined transformation, and by the rule from the last chapter, that is the combined transformation, completely. Written as columns, those two landing spots are the product matrix.</p>
+<div id="fig-compose" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-compose-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-06-compose.svg" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-compose-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: To compose two transformations, send each basis vector through the first, then the second. The two final landing spots, as columns, are the combined transformation.
+</figcaption>
+</figure>
+</div>
+<p>That is genuinely all matrix multiplication is. To multiply two matrices is to ask where the basis ends up after both transformations have acted, first one then the other, and to record those final landing spots as the columns of a new matrix. Everything mechanical about the operation, every product and sum in the rule people memorise, is just the arithmetic of tracing the basis through twice.</p>
+<p>The order is baked in and cannot be swapped, exactly as the last chapter warned. “First this transformation, then that one” is a different journey for the basis than “first that one, then this one,” and the two journeys generally end in different places. So the two orders give different combined transformations, and different product matrices. When we write the product of two matrices, the order we write them in records which transformation happens first, and getting it backwards computes the wrong journey.</p>
+</section>
+<section id="the-math-built-up" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-math-built-up">The math, built up</h2>
+<p>Let us turn “trace the basis through both transformations” into arithmetic, and watch the famous rule assemble itself.</p>
+<p>Call the first transformation <span class="math inline">\(B\)</span> and the second <span class="math inline">\(A\)</span>, so we do <span class="math inline">\(B\)</span> first, then <span class="math inline">\(A\)</span>. We want the combined matrix, and we know it column by column: its first column is where <span class="math inline">\([1, 0]\)</span> ends up after both moves, its second column is where <span class="math inline">\([0, 1]\)</span> ends up.</p>
+<p>Where does <span class="math inline">\([1, 0]\)</span> go? First <span class="math inline">\(B\)</span> acts on it. Applying a matrix to <span class="math inline">\([1, 0]\)</span> just picks out that matrix’s first column, because <span class="math inline">\([1, 0]\)</span> is one of the first column and none of the second. So after <span class="math inline">\(B\)</span>, our basis vector sits at <span class="math inline">\(B\)</span>’s first column. Then <span class="math inline">\(A\)</span> acts on <em>that</em> vector. And applying <span class="math inline">\(A\)</span> to a vector is the operation we built last chapter: combine <span class="math inline">\(A\)</span>’s columns using the vector’s entries. So the first column of the combined matrix is <span class="math inline">\(A\)</span> applied to <span class="math inline">\(B\)</span>’s first column. The second column is the same story with <span class="math inline">\([0, 1]\)</span>: it becomes <span class="math inline">\(B\)</span>’s second column, then <span class="math inline">\(A\)</span> acts on that.</p>
+<p>So the combined matrix is <span class="math inline">\(A\)</span> applied to each column of <span class="math inline">\(B\)</span>, one column at a time. That is the entire rule, stated meaningfully:</p>
+<p><span class="math display">\[
+AB = \big[\; A(\text{first column of } B) \;\;\; A(\text{second column of } B) \;\big]
+\]</span></p>
+<p>Everything usually memorised is the arithmetic of those applications spelled out. Let us make it concrete. Take</p>
+<p><span class="math display">\[
+A = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{bmatrix}, \qquad B = \begin{bmatrix} 1 &amp; 1 \\ 0 &amp; 1 \end{bmatrix}
+\]</span></p>
+<p>where <span class="math inline">\(A\)</span> is a quarter-turn and <span class="math inline">\(B\)</span> is the shear from before. We do <span class="math inline">\(B\)</span> then <span class="math inline">\(A\)</span>. Take <span class="math inline">\(B\)</span>’s first column, <span class="math inline">\([1, 0]\)</span>, and apply <span class="math inline">\(A\)</span> by combining <span class="math inline">\(A\)</span>’s columns: <span class="math inline">\(1\cdot[0,1] + 0\cdot[-1,0] = [0, 1]\)</span>. Take <span class="math inline">\(B\)</span>’s second column, <span class="math inline">\([1, 1]\)</span>, and apply <span class="math inline">\(A\)</span>: <span class="math inline">\(1\cdot[0,1] + 1\cdot[-1,0] = [-1, 1]\)</span>. Those two results are the columns of the product:</p>
+<p><span class="math display">\[
+AB = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 1 \end{bmatrix}
+\]</span></p>
+<p>Now compare this to the rule as it is usually stated: each entry of the product is a row of <span class="math inline">\(A\)</span> dotted with a column of <span class="math inline">\(B\)</span>. Check the top-left entry, first row of <span class="math inline">\(A\)</span> dotted with first column of <span class="math inline">\(B\)</span>: <span class="math inline">\([0, -1]\cdot[1, 0] = 0\)</span>. It matches. That row-times-column recipe is not a separate fact to learn. It is exactly what “apply <span class="math inline">\(A\)</span> to each column of <span class="math inline">\(B\)</span>” works out to, entry by entry, because applying a matrix produces each output entry as a dot product of a row with the input, which we saw last chapter. The dreaded rule is just our column-tracing, written out one number at a time.</p>
+<p>There is one honest bookkeeping point the tracing makes obvious that the memorised rule hides. For the combination to make sense at all, <span class="math inline">\(A\)</span> has to be able to act on the columns of <span class="math inline">\(B\)</span>. A column of <span class="math inline">\(B\)</span> lives in whatever space <span class="math inline">\(B\)</span> outputs into, and <span class="math inline">\(A\)</span> has to take vectors from exactly that space. If they do not match, there is no combined journey to speak of, and the product simply does not exist. This is the real reason two matrices can only be multiplied when the first one’s width matches the second one’s height. It is not an arbitrary shape rule. It is the requirement that the output of one transformation is a valid input to the next.</p>
+</section>
+<section id="build-it-yourself" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
+<p>The product is <code>@</code>, the same operator we used to apply a matrix to a vector, now between two matrices. But the point of this chapter is that the product is column-tracing, so we build it that way first and check the operator agrees.</p>
+<p>Here are the quarter-turn and the shear from the last section:</p>
+<div id="91c766b9" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">1</span>,  <span class="dv">0</span>]])     <span class="co"># quarter turn</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">1</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>, <span class="dv">1</span>]])      <span class="co"># shear</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We do <span class="math inline">\(B\)</span> first, then <span class="math inline">\(A\)</span>, so we want <span class="math inline">\(A\)</span> applied to each column of <span class="math inline">\(B\)</span>. Pull out <span class="math inline">\(B\)</span>’s columns and send each one through <span class="math inline">\(A\)</span>:</p>
+<div id="e6123f62" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>col1 <span class="op">=</span> A <span class="op">@</span> B[:, <span class="dv">0</span>]     <span class="co"># A applied to B's first column</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>col2 <span class="op">=</span> A <span class="op">@</span> B[:, <span class="dv">1</span>]     <span class="co"># A applied to B's second column</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>combined <span class="op">=</span> np.column_stack([col1, col2])</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(combined)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 0 -1]
+ [ 1  1]]</code></pre>
+</div>
+</div>
+<p>The two landing spots, stacked as columns, give the combined matrix. Now the built-in product:</p>
+<div id="c91ad87b" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A <span class="op">@</span> B)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 0 -1]
+ [ 1  1]]</code></pre>
+</div>
+</div>
+<p>The same matrix. <code>A @ B</code> is doing exactly what we did by hand: applying <span class="math inline">\(A\)</span> to each column of <span class="math inline">\(B\)</span> and collecting the results as columns. We can put them side by side to be sure nothing differs:</p>
+<div id="05a7dd4e" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array_equal(combined, A <span class="op">@</span> B))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><code>True</code>. The operator and the column-tracing are one operation.</p>
+<p>Now see the order dependence directly. We do the two transformations in the other order, <span class="math inline">\(A\)</span> first then <span class="math inline">\(B\)</span>, which is the product <span class="math inline">\(B @ A\)</span>, and compare:</p>
+<div id="2a406199" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A <span class="op">@</span> B)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(B <span class="op">@</span> A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 0 -1]
+ [ 1  1]]
+[[ 1 -1]
+ [ 1  0]]</code></pre>
+</div>
+</div>
+<p>The two are different matrices. Doing the shear then the quarter-turn is a different combined transformation from the quarter-turn then the shear, and the arithmetic shows it plainly: swap the order and you get a different grid of numbers, because you asked for a different journey. This is the socks-and-shoes fact from the last chapter, now something we can watch NumPy confirm in two lines.</p>
+<p>And, as everywhere else, none of this cares about size. Multiply a matrix that is three hundred wide by one that is three hundred tall and <code>@</code> still traces every basis vector through both transformations, composing two moves through a space we cannot picture into a single matrix, on the same one line.</p>
+</section>
+<section id="where-it-lives-in-ml" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="where-it-lives-in-ml">Where it lives in ML</h2>
+<p>This chapter is the reason a network can be deep. A deep network is, structurally, a long chain of transformations: the input vector enters, the first matrix moves it, the result is handed to the second matrix, which moves it again, and on down through the layers. “Deep” means many transformations composed one after another, and composition is the operation from this chapter. Every time a model passes data from one layer to the next, it is doing exactly the chaining we just built.</p>
+<p>Seeing a network as composed transformations explains what the depth is <em>for</em>. One matrix can only reshape space in one linear way. But a sequence of transformations, each acting on the last one’s output, can carry a point through a long, elaborate journey, reshaping the space in stages. The early layers make coarse moves, the later ones refine, and the composition of all of them is a single overall transformation from raw input to useful output. Depth is just a long composition, and this chapter is how the pieces join.</p>
+<p>There is a practical payoff hiding in the fact that composition produces a single matrix. When a fixed sequence of linear transformations is applied to millions of data points, we do not have to push every point through every step. We can compose the whole sequence once, into one matrix, and then apply that single matrix to every point. The many-step journey and the one-step journey give identical results, because that is what composition means, but the one-step version does far less work. Collapsing a chain of transformations into one is a standard efficiency move, and it is only possible because the product of matrices is itself a matrix.</p>
+<p>But this same collapsibility is the wall we have circled since the second chapter, and now we can state it exactly. If every layer were only a matrix, the entire network, however deep, would compose down to one matrix. All that depth would collapse into a single linear transformation, and the network could do no more than one layer could. Composition, the very thing that makes depth possible, is also what would make depth <em>pointless</em> if layers were purely linear. A thousand composed linear moves are still just one linear move.</p>
+<p>This is the precise reason a real network places a small non-linear step between its matrices. That step breaks the collapsibility. With a bend between each pair of matrices, the layers can no longer be composed away into one, and the depth becomes real: each layer adds something the others cannot undo. The matrices supply the movement, composition chains them, and the non-linear steps are what stop the chain from collapsing. We have now met this bend three times as a promise. When we build it in Part 4, this is the collapse it exists to prevent.</p>
+</section>
+<section id="common-misunderstandings" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="common-misunderstandings">Common misunderstandings</h2>
+<p>Composition is a clean idea, but its notation is the most misleading we have met, and a couple of traps come with it.</p>
+<p><strong>In <span class="math inline">\(AB\)</span>, the right-hand matrix acts first.</strong> This catches almost everyone. We read left to right, so <span class="math inline">\(AB\)</span> looks like it should mean “<span class="math inline">\(A\)</span>, then <span class="math inline">\(B\)</span>.” It means the opposite. The product <span class="math inline">\(AB\)</span> applied to a vector is <span class="math inline">\(A(B\mathbf{v})\)</span>: the vector meets <span class="math inline">\(B\)</span> first, and <span class="math inline">\(A\)</span> acts on the result. The reason is that the vector sits on the right, <span class="math inline">\(AB\mathbf{v}\)</span>, so the matrix nearest it, <span class="math inline">\(B\)</span>, reaches it first. When you read a chain of matrices, read the order of <em>action</em> from right to left, even though the symbols run left to right. Getting this backwards computes a different journey and a different answer, with nothing to warn you.</p>
+<p><strong>You cannot multiply any two matrices.</strong> Ordinary numbers multiply in any combination, but matrices carry shapes, and the shapes have to meet. The product <span class="math inline">\(AB\)</span> exists only when the output space of <span class="math inline">\(B\)</span> is the input space <span class="math inline">\(A\)</span> expects, which shows up as a dimension that has to match between them. When it does not match, there is no combined journey and no product; the operation is simply undefined. This is not a rule to memorise so much as a consequence of what composition is: the second transformation has to be able to receive what the first one produced.</p>
+<p><strong>A product of matrices is a single matrix, not a stored to-do list.</strong> Once we compute <span class="math inline">\(AB\)</span>, the result is one matrix, one transformation, with no memory that it came from two. The two-step origin has been fully absorbed into one grid of numbers. This is exactly why the collapse from the last section works and why it saves computation. But it cuts both ways: given only the product, you cannot in general recover which two matrices were multiplied to make it, any more than knowing a sum is twelve tells you it was seven plus five. The composition flows one way, into the product, and does not come back out.</p>
+<p><strong>Composition is not commutative, but it is associative.</strong> We have leaned hard on order mattering, <span class="math inline">\(AB \ne BA\)</span>, and that stays true. But a different rearrangement is always safe: when three or more transformations are chained, how you <em>group</em> them does not change the result. Doing <span class="math inline">\(A\)</span> after the combination of <span class="math inline">\(B\)</span> and <span class="math inline">\(C\)</span> is the same as doing the combination of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> before <span class="math inline">\(C\)</span>, as long as the left-to-right order is untouched. Order is fixed; grouping is free. This is why we can write a long chain of matrices with no brackets at all and compose them in whatever grouping is most convenient, which the efficiency trick from the last section quietly relied on.</p>
+</section>
+<section id="check-your-intuition" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="check-your-intuition">Check your intuition</h2>
+<p>Try each before opening the answers. These ask you to reason about composition, not to grind out products.</p>
+<p><strong>1.</strong> <span class="math inline">\(A\)</span> is a quarter-turn counterclockwise and <span class="math inline">\(B\)</span> is a stretch that doubles the horizontal axis. In the product <span class="math inline">\(AB\)</span>, which transformation acts on a vector first?</p>
+<p><strong>2.</strong> You compose a transformation with the identity matrix, the one that does nothing. What is <span class="math inline">\(AI\)</span>, and what is <span class="math inline">\(IA\)</span>? Does order matter here?</p>
+<p><strong>3.</strong> A transformation <span class="math inline">\(R\)</span> rotates the plane by ninety degrees. What is <span class="math inline">\(R\)</span> composed with itself four times, <span class="math inline">\(RRRR\)</span>, as a transformation? You should be able to answer without multiplying anything.</p>
+<p><strong>4.</strong> Someone computes <span class="math inline">\(AB\)</span> and <span class="math inline">\(BA\)</span> for two matrices and gets the same result both times. Have they necessarily made a mistake?</p>
+<p><strong>5.</strong> You have a fixed chain of three matrices that you must apply to a million data points. Describe two different orders of operations that give the same answers, and say which does less total work.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> <span class="math inline">\(B\)</span> acts first. In the product <span class="math inline">\(AB\)</span> applied to a vector, the vector sits on the right as <span class="math inline">\(AB\mathbf{v}\)</span>, so the nearest matrix, <span class="math inline">\(B\)</span>, reaches it first, and <span class="math inline">\(A\)</span> acts on the result. The vector is stretched horizontally, then the stretched vector is turned a quarter-turn. Reading the action right to left is the habit to keep.</p>
+<p><strong>2.</strong> Both <span class="math inline">\(AI\)</span> and <span class="math inline">\(IA\)</span> equal <span class="math inline">\(A\)</span>. Composing with the do-nothing transformation leaves the other transformation unchanged, whichever side it sits on, because doing nothing before a move or nothing after a move both leave you with just the move. So this is a case where order does not matter, and the identity is exactly the matrix that commutes with everything. It is the rare exception to order-dependence, and it earns that by doing nothing.</p>
+<p><strong>3.</strong> It is the identity, the transformation that leaves everything where it is. A quarter-turn done four times is a full turn of three hundred and sixty degrees, which brings every vector back to exactly where it started. No arithmetic is needed: four quarter-turns is one full rotation, and a full rotation is indistinguishable from doing nothing. This is a small taste of how thinking in transformations can outrun computing in numbers.</p>
+<p><strong>4.</strong> No.&nbsp;Order usually matters, but not always, and some pairs of transformations genuinely commute. Two rotations about the same centre commute, because turning by one angle then another lands you at the summed angle regardless of order. A stretch and the identity commute. Two stretches along the same axes commute. So <span class="math inline">\(AB = BA\)</span> is unusual but perfectly possible, and finding it does not imply an error; it means these two particular transformations happen not to interfere with each other.</p>
+<p><strong>5.</strong> Applying the chain point by point, you could push each of the million points through all three matrices in turn, which is three matrix-vector applications per point, three million in total. Or you could first compose the three matrices into a single matrix, one small piece of work done once, and then apply that single matrix to each of the million points, which is one application per point, a million in total. Both give identical answers, because composition preserves the result, but the second does roughly a third of the work. This is the collapse from the fifth section, and it relies on grouping being free even though order is fixed.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/01-05-matrices.html" class="pagination-link" aria-label="Matrices as Transformations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrices as Transformations</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/01-07-independence-basis-rank.html" class="pagination-link" aria-label="Independence, Basis, and Rank">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Basis, and Rank</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-06-matrix-multiplication.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

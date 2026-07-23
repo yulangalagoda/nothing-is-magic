@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Vectors: Arrows and Lists – Nothing Is Magic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/01-02-adding-scaling.html" rel="next">
+<link href="../index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b687d2e570ee777d37fd4aa2c902886a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-01-vectors.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Nothing Is Magic</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/yulangalagoda/nothing-is-magic" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-01-vectors.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-02-adding-scaling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-03-dot-product.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-04-norms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-05-matrices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrices as Transformations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-06-matrix-multiplication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Matrix Multiplication as Composition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-07-independence-basis-rank.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Basis, and Rank</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-08-determinant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Determinant</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-09-systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Systems of Equations, Geometrically</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-10-eigenvectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Eigenvectors and Eigenvalues</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-11-svd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Singular Value Decomposition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-12-high-dimensions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">High-Dimensional Space</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-itch" id="toc-the-itch" class="nav-link active" data-scroll-target="#the-itch">The itch</a></li>
+  <li><a href="#the-picture" id="toc-the-picture" class="nav-link" data-scroll-target="#the-picture">The picture</a></li>
+  <li><a href="#the-math-built-up" id="toc-the-math-built-up" class="nav-link" data-scroll-target="#the-math-built-up">The math, built up</a></li>
+  <li><a href="#build-it-yourself" id="toc-build-it-yourself" class="nav-link" data-scroll-target="#build-it-yourself">Build it yourself</a></li>
+  <li><a href="#where-it-lives-in-ml" id="toc-where-it-lives-in-ml" class="nav-link" data-scroll-target="#where-it-lives-in-ml">Where it lives in ML</a></li>
+  <li><a href="#common-misunderstandings" id="toc-common-misunderstandings" class="nav-link" data-scroll-target="#common-misunderstandings">Common misunderstandings</a></li>
+  <li><a href="#check-your-intuition" id="toc-check-your-intuition" class="nav-link" data-scroll-target="#check-your-intuition">Check your intuition</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-01-vectors.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-itch" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-itch">The itch</h2>
+<p>It is a calm, quiet night, and Spotify plays us a song we have never heard before. It is by a band we could not name, from a country we have never visited, sung in a language we do not speak. And somehow it fits. It settles into the evening so well that we do not reach for the phone to skip it. We just let it play.</p>
+<p>Something chose that song for us. But that something has never heard a song in its life. It has no ears. It has never felt a bassline in its chest, never had a chorus stuck in its head on the walk home, never tied a track to a person it misses. It has no idea what music even is.</p>
+<p>And yet it was right.</p>
+<p>So whatever “these two songs are similar” means to that machine, it cannot mean what it means to us. It is not recognising a mood or remembering a feeling. It is doing something far more mechanical, something it can actually carry out step by step. And whatever that something is, it worked well enough that we sat there and let the song play.</p>
+<p>That leaves us with one question, and it is the only question this chapter is about:</p>
+<p><strong>What would we have to turn a song into, so that a machine could measure how close it is to another song?</strong></p>
+<p>Notice that the machine does not need to describe the song, and it does not need to understand it. It only needs to measure it: to get a number out, compare that number to another, and act on the result. So whatever a song becomes in the machine, it has to be the kind of thing we can hold a ruler against and read off a value.</p>
+<p>Turning a thing into something we can measure is the first move in all of machine learning. Every recommendation we have ever been given, every time a phone has unlocked at the sight of a face, every sentence a model has finished for us, all of it starts here. And the idea we need is smaller than we might expect.</p>
+</section>
+<section id="the-picture" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-picture">The picture</h2>
+<p>Let us take a single song and, just to keep things simple while we build the idea, pretend there are only two things about it we can measure: how fast it is, and how loud. Call these tempo and loudness. We write each one down as a number, and the song becomes a pair of numbers, something like 128 and 7.</p>
+<p>That pair of numbers is a <strong>list</strong>, and the order is part of the deal. We agree once and for all that tempo comes first and loudness comes second, and we hold to that for every song we ever describe. Without that agreement the numbers would be ambiguous, so we treat it as a fixed rule. With the rule in place, a list is simply a set of numbers lined up in order, each sitting in a slot that means something.</p>
+<p>Now let us draw the same song. We put tempo along a horizontal axis and loudness along a vertical one. Starting from the corner where the axes meet, we walk 128 steps to the right and then 7 steps up, and we mark where we end up. If we draw an <strong>arrow</strong> from the starting corner to that mark, we have turned the two numbers into something with a shape.</p>
+<p>Look at what that arrow gives us. It points in a particular direction, and it has a particular length. Neither of those is new information we added; both came straight out of the two numbers. Walk the same steps again and we land in exactly the same place, every time.</p>
+<p>Here is the idea the whole chapter turns on: the list and the arrow are the same object looked at in two ways. The list tells us how far to walk along each axis. The arrow is where that walk leaves us. Neither one is more real than the other, and once we have either, we can always recover the other.</p>
+<p>If they are the same object, it is fair to ask why we bother keeping both. The answer is that each is good at something the other is not. The list is what a computer can hold, because it is nothing but numbers in memory, and numbers are all a machine has ever had to work with. The arrow is what we can think with, because no one looks at 128 and 7 and feels anything, but anyone can look at two arrows and see at a glance whether they point the same way. We keep the list for the machine and the arrow for ourselves.</p>
+<p>Two things are worth pinning down before we move on.</p>
+<p>The first is that the order of the numbers is not decoration. If we swap them and write 7 and 128, we now walk 7 steps right and 128 steps up, which lands us somewhere completely different and describes a song crawling along at 7 beats a minute at deafening volume. The slots carry meaning, so moving a number from one slot to another changes what the list says. This is exactly why the order has to be a rule we fix at the start.</p>
+<p>The second is that nothing about this stops at two numbers. Add a third, say danceability, and we have three numbers and an arrow that now lives in a room rather than on a flat page. Add a fourth and we can no longer picture the arrow at all. That is a limit of our eyes, though, not a limit of the idea or of the computer. The list does not mind in the slightest; it simply gets longer. Everything we build in this book keeps working out there in the space we cannot see, which matters because that is where real data actually lives. A song on Spotify is not two numbers. It is a few hundred.</p>
+<p>So let us return to the itch we started with. Two songs become two arrows. When the songs are alike, their arrows point in much the same direction. When they have nothing in common, their arrows point off in different directions. And how close two arrows come to pointing the same way is the kind of question that has a number for an answer, which is precisely what we were looking for.</p>
+<div id="fig-vector-arrow" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-vector-arrow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-01-vector-arrow.svg" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-vector-arrow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: One song, two numbers, one arrow.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="the-math-built-up" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-math-built-up">The math, built up</h2>
+<p>The object we have been describing, the list that is also an arrow, has a name. We call it a <strong>vector</strong>. That is the whole of the word. Every vector in this book is exactly what we just built by hand: some numbers sitting in slots, and an arrow we can picture.</p>
+<p>To work with a vector we need a way to write it down, so we give it a name and put its list in brackets:</p>
+<p><span class="math display">\[
+\mathbf{v} = [128, 7]
+\]</span></p>
+<p>The name here is <span class="math inline">\(\mathbf{v}\)</span>, written in bold to remind us it stands for a whole vector and not a single ordinary number. The brackets hold the list, which we read as tempo 128, loudness 7. Nothing has been calculated yet; this is just notation, a tidy way of naming what we already have. It is also a convention shared by more or less everyone who works with vectors, so once we are comfortable reading it, we can read it anywhere.</p>
+<p>With the notation in place, we can answer the first real question: how long is that arrow?</p>
+<p>Let us look again at the drawing. We have the arrow itself, and we have the two dashed lines we dropped down to the axes. Those three lines together form a right-angled triangle. The two dashed lines are its short sides, 128 across and 7 up, and the arrow is its long side, running from the corner out to the tip.</p>
+<p>And the long side of a right-angled triangle is something we already know how to find. It is the one piece of school geometry most of us still carry: square the two short sides, add them together, and take the square root. That is Pythagoras, and it gives us the length of our arrow directly:</p>
+<p><span class="math display">\[
+\lVert \mathbf{v} \rVert = \sqrt{v_1^2 + v_2^2}
+\]</span></p>
+<p>The left-hand side is read as “the length of <span class="math inline">\(\mathbf{v}\)</span>.” The double bars are chosen deliberately. A single bar, as in <span class="math inline">\(|x|\)</span>, means the size of a single ordinary number, while the double bars mean the size of a whole vector, where several numbers fold together into one. Different job, different symbol.</p>
+<p>The right-hand side is Pythagoras and nothing more. Here <span class="math inline">\(v_1\)</span> is the first number in the list and <span class="math inline">\(v_2\)</span> is the second, so we square each of them, add the results, and take the root. We did not invent a new formula for the length of a vector. We noticed that the arrow was already the long side of a triangle, and used what we had.</p>
+<p>It is worth checking this on a case we can verify with our own eyes. Take <span class="math inline">\(\mathbf{v} = [3, 4]\)</span>, three across and four up:</p>
+<p><span class="math display">\[
+\lVert \mathbf{v} \rVert = \sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5
+\]</span></p>
+<p>The length comes out as five. Draw that arrow on squared paper and measure it with a ruler, and it is five squares long. The formula is not telling us anything we could not have found with the ruler. What it is doing is telling us how to find the length without the ruler, which is the only way a machine could ever find it.</p>
+<p>Now let us add a third number, danceability again, so the vector is <span class="math inline">\([v_1, v_2, v_3]\)</span> and the arrow lives in a room. How long is it?</p>
+<p><span class="math display">\[
+\lVert \mathbf{v} \rVert = \sqrt{v_1^2 + v_2^2 + v_3^2}
+\]</span></p>
+<p>It is the same shape as before: square everything, add it all up, take the root. A fourth number puts four squares under the root, and three hundred numbers put three hundred squares under it:</p>
+<p><span class="math display">\[
+\lVert \mathbf{v} \rVert = \sqrt{v_1^2 + v_2^2 + \cdots + v_n^2}
+\]</span></p>
+<p>This is the moment worth pausing on. Our picture ran out at three numbers, because we cannot see four axes and we never will. The formula, though, does not run out. It has no reason to stop and no way of knowing it should. It simply keeps squaring and summing and rooting, and it keeps handing back a sensible number, and that number keeps behaving in every way like a length. Once we understand how the length works in the two or three dimensions we can see, we can trust it to keep meaning the same thing in the hundreds of dimensions we cannot.</p>
+<p>That is what we gain by turning the picture into arithmetic. The arithmetic is free to go where our eyes cannot follow.</p>
+<p>So we can now take a single song and get a number out of it, which is real progress. But it is not yet the thing we set out to find. A length is a fact about one arrow on its own, and the itch was about two: two songs, two arrows, and how close they come to pointing the same way. One arrow cannot answer that. We need something that takes two vectors in and gives a single number back, and that something turns out to be the most useful object in this entire book. It is where we go next.</p>
+</section>
+<section id="build-it-yourself" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
+<p>We have now found the length of an arrow in two ways, once with a ruler on squared paper and once with Pythagoras on paper. The point all along was to find it without the ruler, so let us hand the job to a machine and watch it do the same thing.</p>
+<p>First we make the vector:</p>
+<div id="eb9c8b7d" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(v)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[3. 4.]</code></pre>
+</div>
+</div>
+<p>It is worth pausing on what we actually gave the computer. We did not give it an arrow; we gave it a list, three then four, in that order. The machine has no picture of this and never will. It has the two numbers, and as we are about to see, the two numbers are all it needs.</p>
+<p>Now we compute the length exactly the way the formula reads, squaring each number, adding the results, and taking the root:</p>
+<div id="1e9c6210" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>squared <span class="op">=</span> v <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> np.<span class="bu">sum</span>(squared)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>length <span class="op">=</span> np.sqrt(total)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(squared)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(total)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(length)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[ 9. 16.]
+25.0
+5.0</code></pre>
+</div>
+</div>
+<p>Each line here is one piece of <span class="math inline">\(\sqrt{v_1^2 + v_2^2}\)</span>. The squares come out as 9 and 16, they add up to 25, and the root of 25 is 5.0. We have done the arithmetic ourselves, step by step, with nothing hidden.</p>
+<p>NumPy also offers the length as a single ready-made function:</p>
+<div id="d163e3d6" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5.0</code></pre>
+</div>
+</div>
+<p>The answer is the same. The word <code>norm</code> is just the mathematician’s term for length, and this function is doing precisely what we did by hand a moment ago: squaring, summing, and rooting. It is not doing anything cleverer than that. Since that claim is easy to check, let us have the machine check it for us:</p>
+<div id="9f01d336" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.sqrt(np.<span class="bu">sum</span>(v <span class="op">**</span> <span class="dv">2</span>)) <span class="op">==</span> np.linalg.norm(v))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>It comes back <code>True</code>, which tells us the library and the formula really are the same thing. (We will find, a little later, that this kind of exact check is not always as trustworthy as it looks here. For now it holds, and it makes the point.)</p>
+<p>Now for the part that matters. Here is a vector with three hundred numbers in it, which is much closer to what a real song actually is. We cannot draw it, we cannot picture it, and we would not know where to begin if we tried:</p>
+<div id="451dd26d" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>big <span class="op">=</span> rng.random(<span class="dv">300</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(big.shape)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(big))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(300,)
+10.683214066915752</code></pre>
+</div>
+</div>
+<p>A number came back.</p>
+<p>It is worth sitting with that for a moment, because it is the whole reason this chapter exists. We asked for the length of an arrow in three hundred dimensions. No person has ever seen such an object or ever will. And the machine answered in a fraction of a millisecond, using nothing but the formula we worked out from a triangle on a page.</p>
+<p>The code did not change to make this happen. <code>np.linalg.norm</code> has no special case for dimensions too high to imagine. It squares, it sums, it roots, which is all it ever did. In everyday work the single line <code>np.linalg.norm(v)</code> is all we would write, but now when we write it we know exactly what it is doing underneath, because we built it ourselves out of a triangle we could see.</p>
+</section>
+<section id="where-it-lives-in-ml" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="where-it-lives-in-ml">Where it lives in ML</h2>
+<p>Everything a model has ever learned from arrived as a vector. Not something like a vector, but a vector exactly: a list of numbers in fixed slots. It is the only kind of thing a machine can be handed in the first place.</p>
+<p>A house is a vector. Three bedrooms, ninety square metres, built in 1974, becomes <span class="math inline">\([3, 90, 1974]\)</span>, and a model that predicts prices sees that and nothing else. No front door, no neighbourhood, no afternoon light through the kitchen window. Just the list.</p>
+<p>An image is a vector too. We read off the brightness of every pixel in a fixed order and lay those values end to end, and a small photo turns into a list of a few hundred thousand numbers. To us the photo is a face. To the machine it is a very long list, and the face was never part of what it received.</p>
+<p>A word is a vector as well, and this one is the strangest of the three. There is nothing about the word <em>coffee</em> we can measure the way we measured tempo, no natural quantity to read off. So the numbers are not measured at all; they are learned. A model reads enough text to work out that <em>coffee</em> belongs near <em>tea</em> and far from <em>bulldozer</em>, and it invents a few hundred numbers that place the word accordingly. None of those numbers means anything on its own. What matters here is only the shape of the answer: even for something as unmeasurable as a word, what the machine ends up holding is a list of numbers.</p>
+<p>What all three share is worth noticing. In every case, somebody had to decide what each slot would hold. Bedrooms or bathrooms? Brightness or colour? That decision is not a small piece of setup before the real work begins. In most machine learning projects, that decision is most of the work.</p>
+<p>So where does the length, <span class="math inline">\(\lVert \mathbf{v} \rVert\)</span>, actually earn its keep? Two places, both of which we will meet properly further on. The first is <strong>normalising</strong>. If we divide a vector by its own length, we get an arrow exactly one unit long that still points the same way, which lets us compare two things by direction alone while ignoring how big they are. It is how we stop a loud song from looking special simply because it is loud. The second is <strong>gradient clipping</strong>. During training, the signal a model uses to correct itself is a vector, and now and then its length grows out of control. So we measure that length, and if it has grown too large we scale it back before it damages the model. In both cases, measuring a length is the first step.</p>
+<p>Now the part that quietly costs people weeks.</p>
+<p>The obvious way to get this wrong is to put numbers in the wrong slots: tempo first for some songs and loudness first for others. Do that, and every length and every distance we compute is nonsense. The machine will not warn us, because it cannot. It never saw the arrow, only the list, and the list looked perfectly fine.</p>
+<p>The subtler failure is worse, precisely because the arithmetic is completely correct. Go back to <span class="math inline">\([128, 7]\)</span>. Tempo lives in the hundreds and loudness lives in single digits, so when we square them we are comparing 16,384 against 49. Tempo was about eighteen times larger than loudness to begin with, but squaring stretches that gap into a factor of more than three hundred. The result is that <span class="math inline">\(\lVert \mathbf{v} \rVert\)</span> is no longer really the size of the song. It is very nearly just the tempo, with a faint trace of loudness left over where the real contribution should have been.</p>
+<p>Nothing failed here and no error was raised. The formula did exactly what we derived it to do. The answer is useless anyway, because we fed it numbers living on wildly different scales and it had no way of knowing that one of them was being drowned out.</p>
+<p>This is the first time in the book we run into the fact that being right about the maths is not enough on its own, and it will not be the last. Getting the formula correct is the easy half. Understanding what the numbers mean before we feed them in is the other half, and it is the half that decides whether anything works at all. This is exactly why normalising exists, and it is why the next section is about the ways this chapter can quietly mislead us.</p>
+</section>
+<section id="common-misunderstandings" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="common-misunderstandings">Common misunderstandings</h2>
+<p><strong>A vector is not a point.</strong> We drew <span class="math inline">\([3, 4]\)</span> as an arrow ending at the spot three across and four up, and it is tempting to decide the vector simply is that spot. It is not. The vector is the journey: three to the right, then four up. It happened to end on that particular spot only because we chose to start drawing from the origin. Start the same journey somewhere else and it finishes somewhere else, even though the vector, the three-right-four-up, has not changed. This can feel like splitting hairs until the next section, where we add two vectors together. Adding two journeys makes plain sense, because we can do one and then the other. Adding two locations makes no sense at all. Keeping vectors and points separate now is what will let the next chapter work.</p>
+<p><strong>The numbers describe the arrow, not the other way round.</strong> Our song was <span class="math inline">\([128, 7]\)</span> when we measured tempo in beats per minute. Measure tempo in beats per second instead and the very same song becomes <span class="math inline">\([2.13, 7]\)</span>. Every number in every vector in the dataset has shifted, and yet not a single song has changed. The arrow is the real thing; the list is only a description of it under a convention we happened to pick, and the instant we pick a different convention, the numbers move. It is worth remembering this the next time some numbers look strange: suspect the convention before you suspect the data.</p>
+<p><strong>Set aside “magnitude and direction.”</strong> Anyone who met vectors in school physics was told a vector is a thing with a magnitude and a direction, like a force or a velocity. That is a perfectly good picture for arrows in the physical world, but it can mislead us here. It puts direction and length first, as though they were what the vector truly is, and treats the numbers as a readout that comes second. In machine learning the order is reversed. The numbers come first. They are handed to us hundreds at a time, and most of them measure nothing we could ever point to. Direction and length are not what such a vector is; they are things we compute from its numbers when we happen to need them. A word embedding has no direction that anyone chose. It has a few hundred numbers, and a direction falls out of them if we ask for one.</p>
+<p><strong>The machine’s arithmetic is not exact.</strong> A little earlier we asked the machine whether the formula and the library agreed:</p>
+<div id="05a98d6b" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.sqrt(np.<span class="bu">sum</span>(v <span class="op">**</span> <span class="dv">2</span>)) <span class="op">==</span> np.linalg.norm(v))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>It answered <code>True</code>, and we should admit that this was partly luck. The numbers were clean and the two calculations happened to land on exactly the same value. In general, computers store most numbers as very close approximations rather than exact values, so two different routes to what should be “the same” answer can end up a hair apart. Ask for exact equality and you will sometimes get <code>False</code> for two quantities that are equal in every way you actually care about. The honest question is whether they are close enough:</p>
+<div id="016ec8de" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.isclose(np.sqrt(np.<span class="bu">sum</span>(v <span class="op">**</span> <span class="dv">2</span>)), np.linalg.norm(v)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>A reasonable habit is to use <code>==</code> only for whole numbers we are certain about, and to reach for <code>np.isclose</code> the moment a square root, a division, or a long sum is involved. It will save us a confusing afternoon at some point.</p>
+<p><strong>Higher dimensions are not simply “more of the same.”</strong> This is the important one, and it is a trap this chapter sets almost by accident. We spent two sections celebrating the fact that the formula follows the numbers into dimensions we cannot see, which is true and worth celebrating. The danger is walking away believing our intuition follows just as easily, as though three hundred dimensional space were ordinary flat space with more elbow room. It is not. Things happen out there that never happen on a page. Pick two vectors at random in three hundred dimensions, for instance, and they will almost always come out very nearly at right angles to each other, again and again, for reasons that feel wrong right up until we see why. The formulas will keep working perfectly. The instincts we built on flat paper will quietly stop being reliable. That gap between working formulas and failing intuition has a name, the curse of dimensionality, and <a href="01-12-high-dimensions.html" class="quarto-xref"><span>Chapter 12</span></a> is devoted entirely to it.</p>
+</section>
+<section id="check-your-intuition" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="check-your-intuition">Check your intuition</h2>
+<p>Try to reason each of these out before opening the answers. None of them is asking us to recall the formula. Each is asking us to use it.</p>
+<p><strong>1.</strong> What does the arrow for the vector <span class="math inline">\([0, 0]\)</span> look like? How long is it, and which way does it point?</p>
+<p><strong>2.</strong> Two songs, where every number describing the second is exactly double the first: the first is <span class="math inline">\([60, 4]\)</span> and the second is <span class="math inline">\([120, 8]\)</span>. If we draw both arrows, how do they compare?</p>
+<p><strong>3.</strong> Two songs are measured as <span class="math inline">\([1000, 2]\)</span> and <span class="math inline">\([1000, 9]\)</span>. If the only thing we are allowed to look at is the length of each vector, can we tell the two songs apart?</p>
+<p><strong>4.</strong> Is the vector <span class="math inline">\([3, 4]\)</span> the same length as <span class="math inline">\([4, 3]\)</span>? Are they the same vector?</p>
+<p><strong>5.</strong> What is the length of <span class="math inline">\([1, 1, 1, 1]\)</span>? We cannot draw this one, so we will have to compute it instead.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Its length is zero, and it does not point anywhere at all. It is not really an arrow, just a dot resting on the origin, having gone nowhere. That sounds like a technicality, but it matters later. Normalising a vector means dividing it by its length, and the zero vector is the one vector we cannot normalise, because that would mean dividing by zero. It is the exception we will always have to check for by hand.</p>
+<p><strong>2.</strong> They point in exactly the same direction, and the second is simply twice as long as the first. This is the whole idea of scaling: multiply every number in a vector by the same amount and the arrow stretches without ever turning. We will build on this in the next section, and it is also a first hint of why “which direction” and “how long” are two separate questions we can ask about the same arrow.</p>
+<p><strong>3.</strong> Only barely, and that is the lesson. The first length is <span class="math inline">\(\sqrt{1000^2 + 2^2} = \sqrt{1000004} \approx 1000.002\)</span>, and the second is <span class="math inline">\(\sqrt{1000^2 + 9^2} = \sqrt{1000081} \approx 1000.040\)</span>. The two songs differ by more than a factor of four in the quantity we actually care about, and yet their lengths agree to four decimal places. The 1000 drowns everything else out. Length alone is nearly blind here, for the very same different-scales reason we ran into a few sections ago.</p>
+<p><strong>4.</strong> They are the same length, since both give <span class="math inline">\(\sqrt{9 + 16} = 5\)</span>, but they are not the same vector. The vector <span class="math inline">\([3, 4]\)</span> walks three across and four up, while <span class="math inline">\([4, 3]\)</span> walks four across and three up, so the two arrows point in different directions and end in different places. Length is one fact about a vector. It is not the whole vector, and two genuinely different arrows are perfectly free to share it.</p>
+<p><strong>5.</strong> <span class="math inline">\(\sqrt{1^2 + 1^2 + 1^2 + 1^2} = \sqrt{4} = 2\)</span>. There is no picture to draw and no page large enough to hold one, and the answer still comes out clean. Getting 2 without drawing anything is a sign that the central move of this chapter has taken hold: the formula does not care that we cannot see four dimensions, and by now, neither do we.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/01-02-adding-scaling.html" class="pagination-link" aria-label="Adding, Scaling, and Span">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-01-vectors.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

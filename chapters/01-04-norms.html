@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Length, Distance, and Norms – Nothing Is Magic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/01-05-matrices.html" rel="next">
+<link href="../chapters/01-03-dot-product.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b687d2e570ee777d37fd4aa2c902886a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-04-norms.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Nothing Is Magic</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/yulangalagoda/nothing-is-magic" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-01-vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-02-adding-scaling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-03-dot-product.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-04-norms.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-05-matrices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrices as Transformations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-06-matrix-multiplication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Matrix Multiplication as Composition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-07-independence-basis-rank.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Basis, and Rank</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-08-determinant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Determinant</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-09-systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Systems of Equations, Geometrically</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-10-eigenvectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Eigenvectors and Eigenvalues</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-11-svd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Singular Value Decomposition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-12-high-dimensions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">High-Dimensional Space</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-itch" id="toc-the-itch" class="nav-link active" data-scroll-target="#the-itch">The itch</a></li>
+  <li><a href="#the-picture" id="toc-the-picture" class="nav-link" data-scroll-target="#the-picture">The picture</a></li>
+  <li><a href="#the-math-built-up" id="toc-the-math-built-up" class="nav-link" data-scroll-target="#the-math-built-up">The math, built up</a></li>
+  <li><a href="#build-it-yourself" id="toc-build-it-yourself" class="nav-link" data-scroll-target="#build-it-yourself">Build it yourself</a></li>
+  <li><a href="#where-it-lives-in-ml" id="toc-where-it-lives-in-ml" class="nav-link" data-scroll-target="#where-it-lives-in-ml">Where it lives in ML</a></li>
+  <li><a href="#common-misunderstandings" id="toc-common-misunderstandings" class="nav-link" data-scroll-target="#common-misunderstandings">Common misunderstandings</a></li>
+  <li><a href="#check-your-intuition" id="toc-check-your-intuition" class="nav-link" data-scroll-target="#check-your-intuition">Check your intuition</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-04-norms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-itch" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-itch">The itch</h2>
+<p>Back at the start we measured the length of an arrow with Pythagoras, squared the numbers, summed them, took the root, and called it the length. It was the length, and nothing in this chapter takes that back. But there was a quiet assumption hiding inside it, one we never said out loud, and it is worth dragging into the light now because it turns out we had a choice we did not know we were making.</p>
+<p>Here is the assumption. When we measured the distance from the origin to the tip of the arrow, we measured it as the crow flies: a single straight line, cutting diagonally across, ignoring everything in the way. That is one honest way to measure distance. It is not the only one.</p>
+<p>Think about actually getting somewhere in a city laid out in blocks. You cannot cut diagonally through the buildings. You walk so far along one street, then turn and walk so far along another, and the distance you actually travel is the sum of those two walks, not the diagonal a bird would fly. Same two points, same start and finish, and a completely different, equally real number for how far apart they are. The bird and the pedestrian disagree, and neither is wrong. They are answering different questions.</p>
+<p>So “how far apart are these two vectors” does not have one answer. It has several, depending on what kind of travel we have in mind, and each kind gives a different notion of length. The straight-line length from the first chapter is one member of a family. This chapter is about the family, what the other members measure, and the one question in machine learning where picking the right member changes everything: why one of them quietly forces a model to throw away features it does not need.</p>
+</section>
+<section id="the-picture" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-picture">The picture</h2>
+<p>Put two points on a grid: the origin, and a point three streets across and four streets up. We already know what the straight-line distance is, because we computed exactly this in the first chapter. Pythagoras gives <span class="math inline">\(\sqrt{3^2 + 4^2} = 5\)</span>. The bird flies five.</p>
+<p>Now walk it as a pedestrian. Three blocks across, four blocks up, and it does not matter which order or how we zigzag, every legal path that only moves along streets covers the same total: <span class="math inline">\(3 + 4 = 7\)</span>. The pedestrian walks seven. Two honest distances for the same two points, five and seven, and the only difference is whether we are allowed to cut the corner.</p>
+<div id="fig-two-paths" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-04-two-paths.svg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: The same two points, two distances. The straight diagonal is the crow’s five. The path along the streets is the pedestrian’s seven. Neither is wrong; they permit different moves.
+</figcaption>
+</figure>
+</div>
+<p>These two ways of measuring have plain names. The straight-line distance, the one from chapter one, is the <strong>L2 norm</strong>. The city-block distance, the sum of how far we move along each axis, is the <strong>L1 norm</strong>. The names will make more sense once we see the arithmetic, but the pictures are the thing to hold: L2 cuts across, L1 keeps to the grid.</p>
+<p>There is a second way to see the difference, and it is the one that matters most later, so it is worth setting up carefully now. Ask a simple question of each norm: what does “distance exactly one from the origin” look like? Collect every point that sits at distance one, and see what shape they trace.</p>
+<p>For the L2 norm, the straight-line one, every point at distance one is exactly a circle. That is what a circle <em>is</em>, the set of points a fixed straight-line distance from a centre. No surprise there.</p>
+<p>For the L1 norm, the city-block one, the shape is not a circle. The points at city-block distance one from the origin trace a diamond, a square balanced on its corner, with its points sitting out on the axes and its flat sides cutting across the diagonals. It looks strange until you check a corner against a side. The point one step out along an axis, straight out and nowhere else, is city-block distance one. But a point out on the diagonal has to spend its budget of one on <em>both</em> axes at once, so it cannot reach as far along either, and the boundary pulls in. Full reach along the axes, pinched on the diagonals: that is a diamond.</p>
+<div id="fig-unit-shapes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-unit-shapes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-04-unit-shapes.svg" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-unit-shapes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: Distance one from the origin, drawn for each norm. Under L2 it is a circle. Under L1 it is a diamond, reaching furthest along the axes and pinched in on the diagonals.
+</figcaption>
+</figure>
+</div>
+<p>Hold onto that diamond. The fact that L1’s shape has sharp corners sitting exactly on the axes, while L2’s is smooth all the way round, looks like a geometric curiosity right now. It is not. When we reach machine learning it will turn out to be the entire reason L1 does something L2 cannot, but we are not ready to say why yet. For now, just notice that the corners are on the axes, and that the circle has no corners at all.</p>
+</section>
+<section id="the-math-built-up" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-math-built-up">The math, built up</h2>
+<p>Both norms are easy to write down, and setting them side by side shows exactly what they share and where they part.</p>
+<p>Start with the one we already have. The L2 norm squares each number, sums, and takes the root:</p>
+<p><span class="math display">\[
+\lVert \mathbf{v} \rVert_2 = \sqrt{v_1^2 + v_2^2 + \cdots + v_n^2}
+\]</span></p>
+<p>The only new thing is the small <span class="math inline">\(2\)</span> tucked under the bars. In the first chapter we wrote <span class="math inline">\(\lVert \mathbf{v} \rVert\)</span> with no subscript, because there was only one length in the room and it needed no label. Now that there is more than one, the subscript says which. The bare <span class="math inline">\(\lVert \mathbf{v} \rVert\)</span> from here on still means the L2 norm; it is the default, and the subscript is there for when we need to be explicit.</p>
+<p>The L1 norm is simpler, and in a way more honest about what it does. No squaring, no root. Take the size of each number, ignoring its sign, and add them up:</p>
+<p><span class="math display">\[
+\lVert \mathbf{v} \rVert_1 = |v_1| + |v_2| + \cdots + |v_n|
+\]</span></p>
+<p>That is the city-block distance in symbols. Each <span class="math inline">\(|v_i|\)</span> is how far we walk along one street, and the norm is the total walk. The absolute value bars are doing the “how far, never mind which way” that a pedestrian cares about: walking three blocks west is three blocks of walking, not minus three.</p>
+<p>Look at what the two formulas share. Both take the numbers of the vector, do something to each one that throws the sign away, and add the results. L2 throws the sign away by squaring, which also stretches big numbers out; L1 throws it away with the absolute value, which treats every unit of distance the same. That single difference, squaring versus not, is the whole reason their unit shapes came out so differently, a smooth circle against a cornered diamond.</p>
+<p>The naming is not an accident either. There is a whole family here, one norm for each choice of a number <span class="math inline">\(p\)</span>: raise each <span class="math inline">\(|v_i|\)</span> to the power <span class="math inline">\(p\)</span>, sum, and take the <span class="math inline">\(p\)</span>-th root. Set <span class="math inline">\(p = 2\)</span> and the squares and square root give L2. Set <span class="math inline">\(p = 1\)</span> and the powers do nothing, leaving the plain sum of absolute values, L1. Other values of <span class="math inline">\(p\)</span> exist and occasionally matter, but two members of this family carry almost all the weight in machine learning, and they are the two we have. We will not need the general machine again; it is enough to know the two norms are cousins, not strangers, and that the subscript is pointing at which cousin.</p>
+<p>One value of <span class="math inline">\(p\)</span> is worth naming just so it does not seem mysterious later. As <span class="math inline">\(p\)</span> grows without bound, the norm comes to care only about the single largest entry, and in the limit it <em>is</em> the largest absolute entry, called the L-infinity norm. We will meet it only in passing. The two that earn their keep are L1 and L2.</p>
+</section>
+<section id="build-it-yourself" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
+<p>Both norms are short in NumPy, and building each by hand first shows there is nothing to either one but the formula.</p>
+<p>Take a vector and compute its L2 norm the long way, squaring, summing, rooting, exactly as we did in the first chapter:</p>
+<div id="5783384d" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">3.0</span>, <span class="op">-</span><span class="fl">4.0</span>])</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>l2_by_hand <span class="op">=</span> np.sqrt(np.<span class="bu">sum</span>(v <span class="op">**</span> <span class="dv">2</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(l2_by_hand)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5.0</code></pre>
+</div>
+</div>
+<p>Five, the crow’s distance, and notice it did not care that the second number was negative: squaring removed the sign along the way. Now the L1 norm by hand, taking the size of each number and adding:</p>
+<div id="bab1f6ca" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>l1_by_hand <span class="op">=</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(v))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(l1_by_hand)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7.0</code></pre>
+</div>
+</div>
+<p>Seven, the pedestrian’s distance. <code>np.abs</code> throws the signs away, three and four, and the sum is seven. Two numbers from the same vector, five and seven, the same pair we drew.</p>
+<p>NumPy gives both through one function, <code>np.linalg.norm</code>, steered by an argument called <code>ord</code> that picks which norm. Left alone it gives L2, the default we have been leaning on:</p>
+<div id="989e996d" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v))        <span class="co"># L2, the default</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">2</span>))     <span class="co"># L2, asked for explicitly</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">1</span>))     <span class="co"># L1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5.0
+5.0
+7.0</code></pre>
+</div>
+</div>
+<p>The first two both print five, the same number, one by default and one by request. The third prints seven. The single argument is the whole difference between the crow and the pedestrian, and it lines up with the subscript from the last section: <code>ord=1</code> is <span class="math inline">\(\lVert \mathbf{v} \rVert_1\)</span>, <code>ord=2</code> is <span class="math inline">\(\lVert \mathbf{v} \rVert_2\)</span>.</p>
+<p>It is worth confirming, once, that the built-in really is doing our two hand formulas and nothing more:</p>
+<div id="c579f843" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">2</span>) <span class="op">==</span> l2_by_hand)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v, <span class="dv">1</span>) <span class="op">==</span> l1_by_hand)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+True</code></pre>
+</div>
+</div>
+<p>Both <code>True</code>. No cleverness hiding in the library: <code>ord=2</code> squares-sums-roots, <code>ord=1</code> sums absolute values, exactly what we wrote out.</p>
+<p>And, as with every operation so far, none of this depends on the vector being short. Give it three hundred numbers and both norms still come back, each on its one line, <code>ord</code> still choosing which kind of distance we mean in a space we could never draw.</p>
+</section>
+<section id="where-it-lives-in-ml" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="where-it-lives-in-ml">Where it lives in ML</h2>
+<p>The two norms do different jobs in machine learning, and the L1 norm does one strange and valuable thing that the diamond has already half-shown us. This is where that shape pays off.</p>
+<p>Start with the ordinary job, the one both norms share. A trained model is a big pile of numbers, its weights, and left unchecked those numbers tend to grow large during training, which makes the model brittle: it fits the training data too tightly and stumbles on anything new. A standard fix is to add a penalty for large weights, so the model is pushed to keep them small while it learns. The size of the weights is measured by a norm, and now the choice of norm matters. Penalise with the L2 norm and the model is pushed to make all its weights small. Penalise with the L1 norm and something different happens: the model is pushed to make many of its weights exactly zero. Not small. Zero.</p>
+<p>A weight of exactly zero is not a small contribution. It is no contribution. The feature it multiplies has been switched off entirely, dropped from the model as if it were never there. So an L1 penalty does not just shrink the model, it <em>selects</em>: it decides which features are worth keeping and sets the rest to nothing. A model with mostly-zero weights is called <strong>sparse</strong>, and sparsity is prized, because a model that uses ten features out of a thousand is one you can inspect, trust, and run cheaply. L1 gives sparsity almost for free. L2 does not. To see why, we go back to the diamond.</p>
+<p>Picture the penalty as a budget. The model wants to reach the weights that fit the data best, but the penalty holds it on a leash, keeping it within a fixed distance of the origin. Under L2 that leash traces a circle; under L1, the diamond. The best-fitting weights sit somewhere out beyond the leash, and the model settles at the point on the leash’s boundary that gets it as close as possible to that ideal.</p>
+<p>Here is the difference, and it is entirely about the shapes. A circle is smooth everywhere, so the closest point on it to some outside target is almost always a generic point, a little of every coordinate, nothing exactly zero. But the diamond is not smooth. It has sharp corners, and those corners stick out further than the flat sides, and, crucially, the corners sit exactly on the axes. A point on an axis is a point where the other coordinates are zero. Because the corners reach out furthest and land on the axes, they are the points the leash most often settles on, and settling on a corner means setting coordinates to zero. The sharp corners of the diamond are sparsity. The smooth circle has no corners to catch on, so it never zeroes anything out.</p>
+<p>That is the whole reason the diamond had to be a diamond, and why we were told to hold onto it two sections ago. The geometry we noticed as a curiosity, corners on the axes, is a working feature-selection mechanism. It is the same fact seen twice: once as a shape, once as a model deciding what to ignore.</p>
+<p>This shows up all over practical machine learning. It is the heart of a method called the lasso, the standard tool when you have far more features than you can use and need the model itself to tell you which ones matter. It is why L1 penalties appear whenever someone wants a model they can actually read. And the choice between L1 and L2 is exactly the choice from the start of this chapter, crow or pedestrian, made where it has real consequences: the same two ways of measuring distance, now deciding whether a model keeps all its features quietly or throws most of them away.</p>
+<p>The failure to watch for is reaching for sparsity when you did not want it, or missing it when you did. Adding an L1 penalty to a model whose features all genuinely matter will zero out useful ones and quietly cost you accuracy. Reaching for L2 when you needed a short, inspectable model will leave you with a thousand tiny non-zero weights and nothing switched off. Neither norm is better. They measure different things, and the diamond and the circle are the picture of the difference.</p>
+</section>
+<section id="common-misunderstandings" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="common-misunderstandings">Common misunderstandings</h2>
+<p>The two norms are simple, but the ideas around them invite a few wrong turns.</p>
+<p><strong>The L1 norm is not an approximation of the L2 norm.</strong> Because the two often come out close, and both measure something called distance, it is tempting to treat L1 as a rougher, cheaper stand-in for the “real” L2 distance. It is not. Neither is more real. They answer different questions, crow or pedestrian, and for the same vector they generally give different numbers on purpose. When they disagree, that is not error to be corrected; it is the two norms measuring the two different things they were built to measure.</p>
+<p><strong>A bare norm means L2, but only by convention.</strong> We settled that <span class="math inline">\(\lVert \mathbf{v} \rVert\)</span> with no subscript means the L2 norm, and that convention holds throughout this book. But it is a convention, not a law, and other authors sometimes default differently or leave it genuinely ambiguous. When you read a norm in someone else’s work with no subscript, the safe move is to check what they mean rather than assume L2. In your own writing, pick a default and hold to it, which is exactly what the subscript is for.</p>
+<p><strong>Sparsity is not the same as smallness.</strong> This is the one that costs people the most. An L2 penalty makes weights small; an L1 penalty makes many of them exactly zero. It is easy to blur these into “both keep the weights under control,” but the gap between small and zero is the whole point. A weight of <span class="math inline">\(0.0001\)</span> is still a feature the model is using, still a coordinate that has to be stored, computed, and reasoned about. A weight of <span class="math inline">\(0\)</span> is a feature switched off. Small is quieter. Zero is gone. If you expected an L2 penalty to hand you a short list of features and it gave you a thousand tiny non-zero ones instead, this is why.</p>
+<p><strong>A zero norm does not mean a zero vector for every notion of “size.”</strong> For both L1 and L2, a norm of zero does mean the vector is the zero vector, all entries zero, and this is a genuine, useful property. The trap is assuming everything anyone calls a “norm” behaves this way. There is a widely used quantity, confusingly nicknamed the “L0 norm,” that simply counts how many entries are non-zero. It is what people often actually mean by sparsity, it is not truly a norm in the strict sense, and it does not follow the rules L1 and L2 do. You do not need it yet. It is flagged only so that the word “norm,” met in the wild, is not assumed to always mean what it means here.</p>
+</section>
+<section id="check-your-intuition" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="check-your-intuition">Check your intuition</h2>
+<p>Try each before opening the answers. As always, these ask you to use the two norms, not just recall their formulas.</p>
+<p><strong>1.</strong> For <span class="math inline">\(\mathbf{v} = [3, -4]\)</span>, compute both <span class="math inline">\(\lVert \mathbf{v} \rVert_1\)</span> and <span class="math inline">\(\lVert \mathbf{v} \rVert_2\)</span>. Which is larger, and will that ordering always hold?</p>
+<p><strong>2.</strong> A vector points straight along one axis, say <span class="math inline">\(\mathbf{v} = [5, 0]\)</span>. What are its L1 and L2 norms? Why are they equal here, when they were different for <span class="math inline">\([3, 4]\)</span>?</p>
+<p><strong>3.</strong> Two weight vectors come out of training. One is <span class="math inline">\([0.5, 0.5, 0.5, 0.5]\)</span>, the other is <span class="math inline">\([1, 0, 0, 0]\)</span>. Compare them under each norm. Which norm sees them as the same size, and which tells them apart?</p>
+<p><strong>4.</strong> You add a penalty to a model and it returns weights with most entries at exactly zero. Which norm did you almost certainly use, and what has it done for you beyond shrinking the weights?</p>
+<p><strong>5.</strong> Under the L1 norm, what does the set of points at distance one from the origin look like, and which points on it are furthest out along the axes? Tie your answer back to sparsity.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> The L1 norm is <span class="math inline">\(|3| + |-4| = 7\)</span>. The L2 norm is <span class="math inline">\(\sqrt{3^2 + (-4)^2} = \sqrt{25} = 5\)</span>. L1 is larger, and that ordering always holds: for any vector, <span class="math inline">\(\lVert \mathbf{v} \rVert_1 \ge \lVert \mathbf{v} \rVert_2\)</span>. The pedestrian, forced to keep to the streets, can never travel less than the crow who cuts across. The two are equal only in the special case where there is no corner to cut, which the next question is about.</p>
+<p><strong>2.</strong> Both norms give five. L1 is <span class="math inline">\(|5| + |0| = 5\)</span>, and L2 is <span class="math inline">\(\sqrt{5^2 + 0^2} = 5\)</span>. They agree because the vector lies flat along a single axis, so there is no diagonal to cut. The pedestrian and the crow walk the very same path when the destination is straight down one street. The norms differ only when a vector spreads across more than one axis at once, giving the crow a corner to cut and the pedestrian a longer way round. That is exactly the case <span class="math inline">\([3, 4]\)</span>: two axes in play, so five versus seven.</p>
+<p><strong>3.</strong> Under L1, both are size one: <span class="math inline">\(0.5\times4 = 2\)</span>… wait, check it. <span class="math inline">\(\lVert[0.5,0.5,0.5,0.5]\rVert_1 = 2\)</span>, and <span class="math inline">\(\lVert[1,0,0,0]\rVert_1 = 1\)</span>. So L1 tells them apart, two against one. Under L2, <span class="math inline">\(\lVert[0.5,0.5,0.5,0.5]\rVert_2 = \sqrt{4\times0.25} = \sqrt{1} = 1\)</span>, and <span class="math inline">\(\lVert[1,0,0,0]\rVert_2 = 1\)</span>. L2 sees them as the same size. This is the mechanism of the last section in miniature: L2 is indifferent between spreading the weight across all four coordinates and piling it onto one, while L1 actively prefers the concentrated, sparse vector, giving it the smaller norm. Under an L1 budget, <span class="math inline">\([1,0,0,0]\)</span> is the cheaper place to be.</p>
+<p><strong>4.</strong> You almost certainly used an L1 penalty. Beyond making the weights small, it has performed feature selection: every weight it drove to exactly zero is a feature switched off, dropped from the model entirely. You have not just a smaller model but a shorter one, using only the features L1 judged worth keeping. An L2 penalty would have left every feature in play with a small non-zero weight.</p>
+<p><strong>5.</strong> It is a diamond, a square standing on its corner, with its four corners sitting out on the axes and its flat sides cutting across the diagonals. The corners are the points furthest out along the axes, and a point on an axis has zeros in its other coordinates. That is the whole link to sparsity: the corners of the L1 unit shape stick out furthest and land exactly where coordinates are zero, so a model held on an L1 budget tends to settle on them, switching those coordinates off. The diamond’s corners and the model’s zeros are the same fact.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/01-03-dot-product.html" class="pagination-link" aria-label="The Dot Product">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/01-05-matrices.html" class="pagination-link" aria-label="Matrices as Transformations">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrices as Transformations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-04-norms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

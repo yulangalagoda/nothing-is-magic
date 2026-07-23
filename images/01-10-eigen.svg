@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 280" font-family="Georgia, serif">
+  <defs>
+    <marker id="egink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#141414"/>
+    </marker>
+    <marker id="egpine" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B5E43"/>
+    </marker>
+    <marker id="eggrey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9a9a9a"/>
+    </marker>
+    <pattern id="eggrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#dcdcdc" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="460" height="280" fill="url(#eggrid)"/>
+
+  <!-- LEFT: a turned direction -->
+  <text x="115" y="30" font-size="12" fill="#4a4a4a" text-anchor="middle">a turned direction</text>
+  <circle cx="80" cy="210" r="2.5" fill="#141414"/>
+  <!-- original diagonal, grey -->
+  <line x1="80" y1="210" x2="150" y2="140" stroke="#9a9a9a" stroke-width="2" marker-end="url(#eggrey)"/>
+  <!-- transformed, ink, pulled flatter -->
+  <line x1="80" y1="210" x2="200" y2="175" stroke="#141414" stroke-width="2.2" marker-end="url(#egink)"/>
+  <text x="150" y="130" font-size="11" fill="#9a9a9a" font-style="italic">before</text>
+  <text x="205" y="178" font-size="11" fill="#141414" font-style="italic">after</text>
+  <text x="115" y="258" font-size="10" fill="#4a4a4a" text-anchor="middle">arrow swung off its line</text>
+
+  <!-- RIGHT: an eigenvector -->
+  <text x="345" y="30" font-size="12" fill="#4a4a4a" text-anchor="middle">an eigenvector</text>
+  <circle cx="300" cy="210" r="2.5" fill="#141414"/>
+  <!-- faint full line through origin along the direction -->
+  <line x1="270" y1="210" x2="440" y2="210" stroke="#1B5E43" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>
+  <!-- original, grey short -->
+  <line x1="300" y1="210" x2="350" y2="210" stroke="#9a9a9a" stroke-width="2" marker-end="url(#eggrey)"/>
+  <!-- transformed, pine, longer, SAME line -->
+  <line x1="300" y1="210" x2="420" y2="210" stroke="#1B5E43" stroke-width="2.4" marker-end="url(#egpine)"/>
+  <text x="330" y="200" font-size="11" fill="#9a9a9a" font-style="italic">before</text>
+  <text x="395" y="200" font-size="11" fill="#1B5E43" font-style="italic">after (×3)</text>
+  <text x="345" y="258" font-size="10" fill="#4a4a4a" text-anchor="middle">stretched, still on its line</text>
+</svg>

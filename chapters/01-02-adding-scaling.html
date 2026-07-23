@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Adding, Scaling, and Span – Nothing Is Magic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/01-03-dot-product.html" rel="next">
+<link href="../chapters/01-01-vectors.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b687d2e570ee777d37fd4aa2c902886a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-02-adding-scaling.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Nothing Is Magic</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/yulangalagoda/nothing-is-magic" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-01-vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-02-adding-scaling.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-03-dot-product.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-04-norms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-05-matrices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrices as Transformations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-06-matrix-multiplication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Matrix Multiplication as Composition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-07-independence-basis-rank.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Basis, and Rank</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-08-determinant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Determinant</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-09-systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Systems of Equations, Geometrically</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-10-eigenvectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Eigenvectors and Eigenvalues</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-11-svd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Singular Value Decomposition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-12-high-dimensions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">High-Dimensional Space</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-itch" id="toc-the-itch" class="nav-link active" data-scroll-target="#the-itch">The itch</a></li>
+  <li><a href="#the-picture" id="toc-the-picture" class="nav-link" data-scroll-target="#the-picture">The picture</a></li>
+  <li><a href="#the-math-built-up" id="toc-the-math-built-up" class="nav-link" data-scroll-target="#the-math-built-up">The math, built up</a></li>
+  <li><a href="#build-it-yourself" id="toc-build-it-yourself" class="nav-link" data-scroll-target="#build-it-yourself">Build it yourself</a></li>
+  <li><a href="#where-it-lives-in-ml" id="toc-where-it-lives-in-ml" class="nav-link" data-scroll-target="#where-it-lives-in-ml">Where it lives in ML</a></li>
+  <li><a href="#common-misunderstandings" id="toc-common-misunderstandings" class="nav-link" data-scroll-target="#common-misunderstandings">Common misunderstandings</a></li>
+  <li><a href="#check-your-intuition" id="toc-check-your-intuition" class="nav-link" data-scroll-target="#check-your-intuition">Check your intuition</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-02-adding-scaling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-itch" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-itch">The itch</h2>
+<p>By the end of the last chapter a song was a vector, a fixed arrow sitting at one spot in space, and we could measure how long that arrow was. That is enough to talk about one song at a time. It is not yet enough to talk about the things we actually care about, which are almost never single songs.</p>
+<p>Think about what a playlist really is. Not a list of songs, but a kind of region: a mood, a texture, a stretch of the space where the songs we like tend to fall. A genre is the same, only larger. When we say two playlists “overlap,” or that one song sits “between” two others, or that some track is “what you’d get if you crossed these two artists,” we are talking about space in a way that a single fixed arrow cannot reach.</p>
+<p>So the question for this chapter is about what we can do with vectors once we have more than one. Given a handful of songs, what other songs can we describe using only them? Can we build a point that sits halfway between two tracks? Can we take a direction we like and follow it further than any single song goes? Can we start with two or three vectors and map out the whole region they open up?</p>
+<p>All of that turns out to rest on two operations, and only two. We can add vectors together, and we can scale a vector up or down. Everything in this chapter, up to and including the idea that a few vectors can lay out a whole region of space, is built from just those two moves. They are simple enough to define in a sentence each, and between them they are most of what linear algebra ever does.</p>
+</section>
+<section id="the-picture" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-picture">The picture</h2>
+<p>Start with adding, because it is the one we already set up. At the end of the last chapter we said a vector is a journey, not a place: <span class="math inline">\([3, 4]\)</span> means three across and four up, and it lands where it lands only because we started at the origin. If a vector is a journey, then adding two of them should mean the obvious thing. Do the first journey, and from wherever it leaves us, do the second.</p>
+<p>Picture two vectors, <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span>. Walk <span class="math inline">\(\mathbf{v}\)</span> first: from the origin to the tip of <span class="math inline">\(\mathbf{v}\)</span>. Now, without going back, walk <span class="math inline">\(\mathbf{w}\)</span> starting from where <span class="math inline">\(\mathbf{v}\)</span> ended. We finish somewhere new, and the arrow from the origin straight to that finishing point is the sum <span class="math inline">\(\mathbf{v} + \mathbf{w}\)</span>. Laid out this way, tip of the first to tail of the second, the picture almost draws itself.</p>
+<p>It does not matter which journey we take first. Walk <span class="math inline">\(\mathbf{w}\)</span> and then <span class="math inline">\(\mathbf{v}\)</span> and we land at exactly the same place, having traced the other two sides of the same parallelogram. Two vectors and their sum always close up into that shape, which is worth holding onto: adding vectors is not a single path but a parallelogram, and the sum is its far corner.</p>
+<div id="fig-addition" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-addition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-02-addition.svg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-addition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Two journeys, either order, same destination. The sum is the diagonal of the parallelogram they close up.
+</figcaption>
+</figure>
+</div>
+<p>Scaling is the second move, and it is simpler. Take one vector and stretch it. If <span class="math inline">\(\mathbf{v}\)</span> is a journey, then <span class="math inline">\(2\mathbf{v}\)</span> is the same journey walked twice as far in the same direction, and <span class="math inline">\(\tfrac{1}{2}\mathbf{v}\)</span> is half of it. The arrow keeps pointing exactly where it did; only its length changes. Scaling never turns a vector, it only lengthens or shortens it.</p>
+<p>One case is worth seeing before it surprises us. Scaling by a negative number, say <span class="math inline">\(-1\)</span>, does not break the rule so much as extend it. The arrow keeps to the same line it was always on, but now it points backwards along that line, to the far side of the origin. Negative scaling is still “the same direction” in the sense that matters here: the same line through space, walked the other way.</p>
+<div id="fig-scaling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-02-scaling.svg" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Scaling moves a vector along one fixed line. Stretching lengthens it, a negative factor sends it back through the origin, but it never leaves the line.
+</figcaption>
+</figure>
+</div>
+<p>Now put the two moves together, because that is where the chapter is really going. Take two vectors, scale each one by however much we like, and add the results. Something like <span class="math inline">\(2\mathbf{v} + 3\mathbf{w}\)</span>, or <span class="math inline">\(\tfrac{1}{2}\mathbf{v} - \mathbf{w}\)</span>. A recipe of that shape, some amount of one vector plus some amount of another, is called a <strong>linear combination</strong>, and it is the single most important construction in this part of the book. Almost everything ahead is linear combinations wearing different clothes.</p>
+<p>Once we can build linear combinations, one last question opens up on its own. If we are allowed every possible combination of <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span>, every amount of each, positive or negative, whole or fractional, what is the full set of places we can reach? That set has a name, the <strong>span</strong> of the two vectors, and picturing it is where we are headed next.</p>
+</section>
+<section id="the-math-built-up" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-math-built-up">The math, built up</h2>
+<p>We have two moves, adding and scaling, and so far we only have them as pictures. To hand them to a machine we need them as arithmetic. Both turn out to be about as simple as arithmetic gets.</p>
+<p>Take addition first. We have <span class="math inline">\(\mathbf{v} = [v_1, v_2]\)</span> and <span class="math inline">\(\mathbf{w} = [w_1, w_2]\)</span>, and we want the single arrow that is <span class="math inline">\(\mathbf{v}\)</span> followed by <span class="math inline">\(\mathbf{w}\)</span>. Walking <span class="math inline">\(\mathbf{v}\)</span> moves us <span class="math inline">\(v_1\)</span> across and <span class="math inline">\(v_2\)</span> up. Walking <span class="math inline">\(\mathbf{w}\)</span> from there moves us a further <span class="math inline">\(w_1\)</span> across and <span class="math inline">\(w_2\)</span> up. So in total we have moved <span class="math inline">\(v_1 + w_1\)</span> across and <span class="math inline">\(v_2 + w_2\)</span> up, and that total is the sum:</p>
+<p><span class="math display">\[
+\mathbf{v} + \mathbf{w} = [v_1 + w_1, \; v_2 + w_2]
+\]</span></p>
+<p>That is the whole rule. Add vectors by adding the numbers that sit in the same slot: first with first, second with second. The tip-to-tail picture and this line of arithmetic are the same fact. One is what we see, the other is what we compute.</p>
+<p>Scaling is even shorter. To walk <span class="math inline">\(\mathbf{v}\)</span> twice as far we double each step, and to walk it by any amount <span class="math inline">\(c\)</span> we multiply each step by <span class="math inline">\(c\)</span>:</p>
+<p><span class="math display">\[
+c\,\mathbf{v} = [c\,v_1, \; c\,v_2]
+\]</span></p>
+<p>Multiply every number in the list by the same amount. That is scaling, in full. Notice the negative case falls out for free: <span class="math inline">\(c = -1\)</span> multiplies each number by <span class="math inline">\(-1\)</span>, flipping the arrow to the far side of the origin exactly as the picture promised, with no new rule required.</p>
+<p>Both operations extend to longer lists without a single change to the idea. A vector with three hundred numbers is added slot by slot, three hundred additions, and scaled by multiplying all three hundred numbers at once. Same rule, longer list, which is the pattern the whole book runs on.</p>
+<p>Now we can write down the construction the chapter has been circling. Scale some vectors, add the results, and the recipe</p>
+<p><span class="math display">\[
+c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \cdots + c_k \mathbf{v}_k
+\]</span></p>
+<p>is a <strong>linear combination</strong> of the vectors <span class="math inline">\(\mathbf{v}_1\)</span> through <span class="math inline">\(\mathbf{v}_k\)</span>. The numbers <span class="math inline">\(c_1\)</span> through <span class="math inline">\(c_k\)</span> are the amounts, one per vector, and they are allowed to be anything: positive, negative, fractional, zero. Every linear combination is just the two moves we already have, applied together and then read off as one arrow.</p>
+<p>That last freedom, that the amounts can be <em>anything</em>, is what opens up a whole region rather than a few scattered points. Fix two vectors <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span> and let their amounts range over every possible pair of numbers. The set of all the arrows we can build this way is called the <strong>span</strong> of <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span>.</p>
+<p>For two vectors that point in different directions, the span is the entire flat plane. Every point on the page is reachable, because any spot can be arrived at by walking some amount of <span class="math inline">\(\mathbf{v}\)</span> and some amount of <span class="math inline">\(\mathbf{w}\)</span>. Dial the two amounts and we can steer anywhere.</p>
+<div id="fig-span" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-span-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-02-span.svg" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-span-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Every combination of two vectors that point different ways fills the whole plane. That filled region is their span.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="build-it-yourself" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
+<p>Both operations were simple enough on paper. In NumPy they are simpler still, because the componentwise rule is exactly how NumPy already thinks.</p>
+<p>Start with two vectors and add them:</p>
+<div id="80b488af" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">2.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">3.0</span>])</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(v <span class="op">+</span> w)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[3. 4.]</code></pre>
+</div>
+</div>
+<p>The result is <code>[3.0, 4.0]</code>, which is <span class="math inline">\([2+1, \; 1+3]\)</span>, first slot with first, second with second. We did not loop over the numbers or add them one at a time. We wrote <code>v + w</code> and NumPy added each slot to its partner on its own. That is the componentwise rule from the last section, and it is built into the <code>+</code> sign.</p>
+<p>Scaling is the same story. Multiply a vector by a number and every slot is multiplied at once:</p>
+<div id="dfaf33cf" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">2</span> <span class="op">*</span> v)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="fl">0.5</span> <span class="op">*</span> v)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">*</span> v)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[4. 2.]
+[1.  0.5]
+[-2. -1.]</code></pre>
+</div>
+</div>
+<p>Three scalings, no loops. <code>2 * v</code> doubles both numbers, <code>0.5 * v</code> halves them, and <code>-1 * v</code> flips their signs, which is the arrow pointing back through the origin exactly as we drew it.</p>
+<p>Now put both moves together into a linear combination. Here is <span class="math inline">\(2\mathbf{v} + 3\mathbf{w}\)</span>:</p>
+<div id="e05155ff" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">2</span> <span class="op">*</span> v <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> w)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[ 7. 11.]</code></pre>
+</div>
+</div>
+<p>That single line scaled two vectors and added the results, and NumPy read it the way we read it on paper: scale, scale, add. Every linear combination we will ever write, however many vectors and whatever the amounts, is this same line made longer.</p>
+<p>It is worth checking once that NumPy’s <code>+</code> really is doing the slot-by-slot rule and nothing else. We can spell the addition out by hand, building the result one slot at a time, and compare:</p>
+<div id="1a67b263" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>by_hand <span class="op">=</span> np.array([v[<span class="dv">0</span>] <span class="op">+</span> w[<span class="dv">0</span>], v[<span class="dv">1</span>] <span class="op">+</span> w[<span class="dv">1</span>]])</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(by_hand)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(v <span class="op">+</span> w)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array_equal(by_hand, v <span class="op">+</span> w))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[3. 4.]
+[3. 4.]
+True</code></pre>
+</div>
+</div>
+<p>The hand-built version and <code>v + w</code> are the same, and <code>np.array_equal</code> confirms it. There is no hidden cleverness in the <code>+</code>. It is the rule we derived, applied to each slot.</p>
+<p>One last thing, the same one that mattered for length. None of this cared that our vectors had two numbers. Give them three hundred and every line above works unchanged: <code>v + w</code> adds three hundred slots, <code>2 * v</code> scales three hundred numbers, and a linear combination stirs them together without a single edit. The picture ran out at three numbers. The arithmetic, and the code, did not.</p>
+</section>
+<section id="where-it-lives-in-ml" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="where-it-lives-in-ml">Where it lives in ML</h2>
+<p>Adding and scaling look almost too simple to be the point. They are the point. Nearly everything a neural network does, from the first layer to the last, is linear combinations, the exact move we just built.</p>
+<p>Picture a single artificial neuron, the basic unit of a network. It receives some numbers, the outputs of the neurons before it, as a vector. It holds its own vector of the same length, called its <strong>weights</strong>. To produce its answer it multiplies each incoming number by the matching weight and adds the results, then does one small extra step we will meet later. That multiply-each-and-add is a linear combination, with the weights as the amounts. A neuron is a linear combination with an opinion about which inputs matter, and that opinion is what the weights are.</p>
+<p>A layer is many neurons at once, so a layer is many linear combinations of the same inputs, each with its own weights. A network is layers stacked on layers. Almost the whole structure, the part that gets trained, the part that holds what the model has learned, is linear combinations repeated at scale. When we say a model has seven billion parameters, we are mostly counting the amounts in a very large number of linear combinations.</p>
+<p>Because the operations are this simple, something surprising becomes possible: we can do arithmetic on meaning. Recall that a word is a vector, a few hundred learned numbers. It turns out those vectors can be added and subtracted and the results still land on sensible words. The celebrated example is</p>
+<p><span class="math display">\[
+\text{king} - \text{man} + \text{woman} \approx \text{queen}
+\]</span></p>
+<p>Read as vectors, this is only adding and scaling. Start at the vector for <em>king</em>, subtract the vector for <em>man</em>, which is scaling by <span class="math inline">\(-1\)</span> and adding, then add the vector for <em>woman</em>. The arrow that results lands nearest, of all the word vectors, to the one for <em>queen</em>. The direction from <em>man</em> to <em>woman</em> turns out to be roughly the same direction as from <em>king</em> to <em>queen</em>, so walking it moves us the way we would hope. Nobody built that in. It fell out of numbers a model chose on its own, and we reach it with nothing but the two moves from this chapter.</p>
+<p>Now the failure worth knowing, and it is a quiet one again. Because a linear combination is only scaling and adding, everything a single layer can do stays within reach of those two moves, and that is a real limit. Scaling and adding can stretch space, flip it, and slide it around, but they cannot bend it. Stack a hundred layers that each only add and scale, and the whole stack still only adds and scales, no matter how tall it is. A network built purely from linear combinations, however many layers deep, can only draw straight lines. It could never tell two tangled-together classes apart, because no amount of stretching and sliding will separate them. And this straightness, lines staying lines and space never bending, is what the word <em>linear</em> has been pointing at all along. It is why the subject is called linear algebra.</p>
+<p>This is why the “one small extra step” each neuron takes is not a detail. That step, a simple bending applied after the linear combination, is the whole reason stacking layers buys us anything. Without it, depth is an illusion and the network collapses back to a single linear combination. We will build that bend, and see exactly why it rescues us, when we reach neural networks in Part 4. For now the thing to hold onto is that the linear combination is the engine, and it is this chapter’s two operations, running at enormous scale.</p>
+</section>
+<section id="common-misunderstandings" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="common-misunderstandings">Common misunderstandings</h2>
+<p><strong>Span is not always the whole space.</strong> We ended the span section with two vectors filling the entire plane, which is the usual case but not the only one. Suppose the two vectors point along the same line, say <span class="math inline">\(\mathbf{v} = [1, 1]\)</span> and <span class="math inline">\(\mathbf{w} = [2, 2]\)</span>. The second is just the first scaled by two, so it opens up no new direction. Every combination of them, whatever amounts we choose, lands somewhere on that one line through the origin. The span has collapsed from a plane to a line. Two vectors reach a plane only when they genuinely point different ways; if one is a scaled copy of the other, they are really one direction wearing two coats, and one direction spans only a line.</p>
+<div id="fig-collinear" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-collinear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-02-collinear.svg" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-collinear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.4: When one vector is a scaled copy of the other, every combination lands on a single line. The span collapses.
+</figcaption>
+</figure>
+</div>
+<p>This is not a curiosity. It is the whole reason the next chapters care about words like independence and rank. The question “do these vectors actually point in different directions, or are some of them redundant” turns out to decide how much space a set of vectors can reach, and we will make it precise before long.</p>
+<p><strong>Scaling by a negative number is not the same as subtracting.</strong> It is tempting to read <span class="math inline">\(-2\mathbf{v}\)</span> as “take away two of <span class="math inline">\(\mathbf{v}\)</span>,” as if we were removing something. Nothing is removed. Scaling by <span class="math inline">\(-2\)</span> builds a brand new arrow, twice as long as <span class="math inline">\(\mathbf{v}\)</span> and pointing the opposite way, and it exists in its own right. Subtraction only enters when we then add that arrow to another. Keep scaling and subtracting separate: scaling reshapes one arrow, subtracting is really adding a negatively scaled one.</p>
+<p><strong>Adding vectors does not average them.</strong> When we add <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span> we land at the far corner of the parallelogram, which is further out than either vector alone. That is not the point “between” them. The midpoint is a different construction, <span class="math inline">\(\tfrac{1}{2}\mathbf{v} + \tfrac{1}{2}\mathbf{w}\)</span>, a particular linear combination with both amounts set to a half. Plain addition and averaging feel similar because both mix two vectors, but they land in different places, and confusing them will put a point where you did not mean to put one.</p>
+<p><strong>A longer vector is not a more important one.</strong> After the last chapter it is easy to read length as weight, as though the longest vector in a combination should dominate. Length and role are separate. A short vector scaled by a large amount contributes more than a long vector scaled by almost nothing. What a vector brings to a combination is set by its amount, its <span class="math inline">\(c\)</span>, not by how long the arrow happened to be to begin with. This is the same scales problem from the last chapter looked at from the other side: raw length is not the same as influence.</p>
+</section>
+<section id="check-your-intuition" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="check-your-intuition">Check your intuition</h2>
+<p>As before, try each one before opening the answers. None of these asks you to recall a rule. Each asks you to use the two moves.</p>
+<p><strong>1.</strong> We have <span class="math inline">\(\mathbf{v} = [2, 1]\)</span> and <span class="math inline">\(\mathbf{w} = [1, 2]\)</span>. What is <span class="math inline">\(\mathbf{v} + \mathbf{w}\)</span>, and what is <span class="math inline">\(\mathbf{v} - \mathbf{w}\)</span>? Draw both if it helps.</p>
+<p><strong>2.</strong> Take a single vector <span class="math inline">\(\mathbf{v} = [3, 1]\)</span>. Describe, in words, the full set of points you can reach using only scalings of <span class="math inline">\(\mathbf{v}\)</span>, every possible amount. What shape is it?</p>
+<p><strong>3.</strong> We have two vectors <span class="math inline">\(\mathbf{v} = [1, 0]\)</span> and <span class="math inline">\(\mathbf{w} = [2, 0]\)</span>. Between them, can we reach the point <span class="math inline">\([0, 1]\)</span>? Why or why not?</p>
+<p><strong>4.</strong> Find the amounts <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> that make <span class="math inline">\(a\,[1, 0] + b\,[0, 1]\)</span> equal to <span class="math inline">\([5, 3]\)</span>. Now do the same for any target <span class="math inline">\([x, y]\)</span>.</p>
+<p><strong>5.</strong> Is the midpoint between <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span> a linear combination of them? If so, what are the two amounts?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Adding slot by slot, <span class="math inline">\(\mathbf{v} + \mathbf{w} = [2+1, \; 1+2] = [3, 3]\)</span>. Subtracting, <span class="math inline">\(\mathbf{v} - \mathbf{w} = [2-1, \; 1-2] = [1, -1]\)</span>. Notice the sum leans up and to the right, halfway in feel between the two originals in direction though longer than either, while the difference points down and to the right, off toward where <span class="math inline">\(\mathbf{v}\)</span> sits relative to <span class="math inline">\(\mathbf{w}\)</span>. Subtraction is just adding <span class="math inline">\(-\mathbf{w}\)</span>, and <span class="math inline">\(-\mathbf{w} = [-1, -2]\)</span> points the opposite way to <span class="math inline">\(\mathbf{w}\)</span>, which is why the result swings below the axis.</p>
+<p><strong>2.</strong> Every scaling of <span class="math inline">\(\mathbf{v} = [3, 1]\)</span> is some amount <span class="math inline">\(c\)</span> times it, <span class="math inline">\([3c, \; c]\)</span>. As <span class="math inline">\(c\)</span> runs through all values, positive, negative, and zero, these points trace the entire straight line through the origin that passes along <span class="math inline">\(\mathbf{v}\)</span>’s direction. The shape is a line: one vector spans a line, exactly the collapsed case from the misunderstandings. Positive <span class="math inline">\(c\)</span> gives the half heading out along <span class="math inline">\(\mathbf{v}\)</span>, negative <span class="math inline">\(c\)</span> the half heading back through the origin, and <span class="math inline">\(c = 0\)</span> the origin itself.</p>
+<p><strong>3.</strong> No.&nbsp;Both <span class="math inline">\(\mathbf{v} = [1, 0]\)</span> and <span class="math inline">\(\mathbf{w} = [2, 0]\)</span> have a second number of zero, and <span class="math inline">\(\mathbf{w}\)</span> is simply <span class="math inline">\(2\mathbf{v}\)</span>, so any combination <span class="math inline">\(a\mathbf{v} + b\mathbf{w}\)</span> has the form <span class="math inline">\([\,a + 2b, \; 0\,]\)</span>. The second slot is always zero, no matter what <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> we pick. The point <span class="math inline">\([0, 1]\)</span> has a second slot of one, so it can never be reached. These two vectors point the same way and span only the horizontal line, and <span class="math inline">\([0, 1]\)</span> is off that line.</p>
+<p><strong>4.</strong> Here <span class="math inline">\(a\,[1, 0] + b\,[0, 1] = [a, b]\)</span>, so to hit <span class="math inline">\([5, 3]\)</span> we need <span class="math inline">\(a = 5\)</span> and <span class="math inline">\(b = 3\)</span>. For a general target <span class="math inline">\([x, y]\)</span> the same reading gives <span class="math inline">\(a = x\)</span> and <span class="math inline">\(b = y\)</span> directly. These two vectors are special: the amounts you need are just the target’s own numbers. That is not a coincidence, and it is the first glimpse of why <span class="math inline">\([1,0]\)</span> and <span class="math inline">\([0,1]\)</span> are the natural reference vectors for the plane, a thread we pick up when we reach basis.</p>
+<p><strong>5.</strong> Yes. The midpoint is <span class="math inline">\(\tfrac{1}{2}\mathbf{v} + \tfrac{1}{2}\mathbf{w}\)</span>, a linear combination with both amounts equal to a half. It sits squarely between the two arrow tips, which is exactly what averaging two things should give, and it is a different point from <span class="math inline">\(\mathbf{v} + \mathbf{w}\)</span>, the far corner of the parallelogram. Halving both amounts pulls the sum back to the middle.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/01-01-vectors.html" class="pagination-link" aria-label="Vectors: Arrows and Lists">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/01-03-dot-product.html" class="pagination-link" aria-label="The Dot Product">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-02-adding-scaling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

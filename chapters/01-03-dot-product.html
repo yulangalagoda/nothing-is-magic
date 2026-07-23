@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; The Dot Product – Nothing Is Magic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/01-04-norms.html" rel="next">
+<link href="../chapters/01-02-adding-scaling.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b687d2e570ee777d37fd4aa2c902886a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-03-dot-product.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Nothing Is Magic</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/yulangalagoda/nothing-is-magic" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-01-vectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Vectors: Arrows and Lists</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-02-adding-scaling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-03-dot-product.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-04-norms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-05-matrices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrices as Transformations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-06-matrix-multiplication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Matrix Multiplication as Composition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-07-independence-basis-rank.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Independence, Basis, and Rank</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-08-determinant.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Determinant</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-09-systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Systems of Equations, Geometrically</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-10-eigenvectors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Eigenvectors and Eigenvalues</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-11-svd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Singular Value Decomposition</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-12-high-dimensions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">High-Dimensional Space</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-itch" id="toc-the-itch" class="nav-link active" data-scroll-target="#the-itch">The itch</a></li>
+  <li><a href="#the-picture" id="toc-the-picture" class="nav-link" data-scroll-target="#the-picture">The picture</a></li>
+  <li><a href="#the-math-built-up-the-formula" id="toc-the-math-built-up-the-formula" class="nav-link" data-scroll-target="#the-math-built-up-the-formula">The math, built up: the formula</a></li>
+  <li><a href="#what-the-dot-product-contains" id="toc-what-the-dot-product-contains" class="nav-link" data-scroll-target="#what-the-dot-product-contains">What the dot product contains</a></li>
+  <li><a href="#build-it-yourself" id="toc-build-it-yourself" class="nav-link" data-scroll-target="#build-it-yourself">Build it yourself</a></li>
+  <li><a href="#where-it-lives-in-ml" id="toc-where-it-lives-in-ml" class="nav-link" data-scroll-target="#where-it-lives-in-ml">Where it lives in ML</a></li>
+  <li><a href="#common-misunderstandings" id="toc-common-misunderstandings" class="nav-link" data-scroll-target="#common-misunderstandings">Common misunderstandings</a></li>
+  <li><a href="#check-your-intuition" id="toc-check-your-intuition" class="nav-link" data-scroll-target="#check-your-intuition">Check your intuition</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-03-dot-product.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Dot Product</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-itch" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-itch">The itch</h2>
+<p>Two chapters ago we asked how a machine could tell that two songs are similar, and we have been carrying that question ever since. We turned each song into a vector, an arrow in space. We learned to measure how long one arrow is. We learned to add two arrows and to scale them. But we never answered the actual question. Length tells us about one arrow on its own. Adding and scaling let us build new arrows. None of it tells us how <em>alike</em> two arrows are.</p>
+<p>Look at what “alike” should mean, now that songs are arrows. Two similar songs became two arrows pointing much the same way. Two songs with nothing in common became two arrows pointing off in different directions. So similarity is about the <em>angle</em> between two arrows. Small angle, alike. Wide angle, different. Pointing opposite ways, as unalike as it gets.</p>
+<p>That reframes the whole problem into something almost embarrassingly concrete. We do not need to understand music. We need to measure the angle between two arrows, using nothing but the lists of numbers the machine actually holds. If we can turn two lists of numbers into a single number that says “these point the same way” or “these point apart,” we are done. The recommendation, the face unlock, the search result, all of it comes down to that one number.</p>
+<p>There is a single operation that produces it. It is the most useful tool in this part of the book, the one the first chapter promised and the last one kept pointing at. It takes two vectors and returns one number, and packed inside that number are the angle between them, the shadow one casts on the other, and the similarity we have been chasing since the first page. It is called the dot product, and everything in this chapter is that one operation seen from three sides.</p>
+</section>
+<section id="the-picture" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-picture">The picture</h2>
+<p>We want the angle between two arrows, but angle is an awkward thing to measure directly from two lists of numbers. So we come at it sideways, through a picture that turns out to carry the angle inside it: the shadow one arrow casts on another.</p>
+<p>Take two vectors, <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span>, drawn from the same origin. Now imagine light coming straight down onto <span class="math inline">\(\mathbf{w}\)</span>, at right angles to it, and look at the shadow <span class="math inline">\(\mathbf{v}\)</span> casts along the line of <span class="math inline">\(\mathbf{w}\)</span>. That shadow has a length, and it is this shadow that quietly knows the angle.</p>
+<p>Watch what the shadow does as we swing <span class="math inline">\(\mathbf{v}\)</span> around. When <span class="math inline">\(\mathbf{v}\)</span> points the same way as <span class="math inline">\(\mathbf{w}\)</span>, it lies flat along <span class="math inline">\(\mathbf{w}\)</span> and its shadow is as long as <span class="math inline">\(\mathbf{v}\)</span> itself. Nothing is lost, because nothing is off to the side. As <span class="math inline">\(\mathbf{v}\)</span> tilts away, the shadow shortens. When <span class="math inline">\(\mathbf{v}\)</span> stands at a right angle to <span class="math inline">\(\mathbf{w}\)</span>, straight up from it, it casts no shadow along <span class="math inline">\(\mathbf{w}\)</span> at all. The shadow has shrunk to nothing. Tilt <span class="math inline">\(\mathbf{v}\)</span> further, past the right angle, and it begins to cast a shadow the other way, pointing backwards along <span class="math inline">\(\mathbf{w}\)</span>, which we read as a negative length.</p>
+<div id="fig-projection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-projection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-03-projection.svg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-projection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: As <span class="math inline">\(\mathbf{v}\)</span> swings away from <span class="math inline">\(\mathbf{w}\)</span>, the shadow it casts along <span class="math inline">\(\mathbf{w}\)</span> shrinks. Aligned, the shadow is full length. At a right angle, it vanishes. Past that, it points backwards.
+</figcaption>
+</figure>
+</div>
+<p>So the shadow’s length is a quiet report on the angle. Full-length shadow means the arrows are aligned. Shrinking shadow means the angle is opening. Zero shadow means a right angle, arrows completely unrelated in direction. Negative shadow means they lean opposite ways. We have turned “what is the angle” into “how long is the shadow,” and length is something we already know how to compute from lists of numbers.</p>
+<p>There is one wrinkle to be honest about now, because it shapes the formula ahead. The shadow depends on two things at once, not one. It depends on the angle, which is what we are chasing, but also on how long <span class="math inline">\(\mathbf{v}\)</span> is to begin with, since a longer arrow casts a longer shadow at the same angle. And when we build the actual operation, it will fold in the length of <span class="math inline">\(\mathbf{w}\)</span> too. The dot product does not hand us the angle cleanly on its own. It hands us the angle tangled together with both lengths, and part of the work in this chapter is learning to separate them back out when we want the angle alone.</p>
+</section>
+<section id="the-math-built-up-the-formula" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="the-math-built-up-the-formula">The math, built up: the formula</h2>
+<p>We have a shadow that knows the angle, and we need it as arithmetic on two lists. Rather than reach for a formula, let us build it from the simplest possible case and let the general rule assemble itself.</p>
+<p>Start with the two reference vectors from the last chapter, <span class="math inline">\([1, 0]\)</span> and <span class="math inline">\([0, 1]\)</span>, pointing straight along the axes. Ask for the shadow of <span class="math inline">\([1, 0]\)</span> on <span class="math inline">\([0, 1]\)</span>. One points along the ground, the other straight up, at a perfect right angle, so from the picture the shadow is zero. Now the shadow of <span class="math inline">\([1, 0]\)</span> on itself: the arrow lies flat along its own direction, so the shadow is its full length, one.</p>
+<p>Those two facts are the whole engine:</p>
+<ul>
+<li>along the same axis, the shadow is full,</li>
+<li>across a right angle, the shadow is nothing.</li>
+</ul>
+<p>Now take two general vectors, <span class="math inline">\(\mathbf{v} = [v_1, v_2]\)</span> and <span class="math inline">\(\mathbf{w} = [w_1, w_2]\)</span>, and split each into its along-the-axes pieces. The <span class="math inline">\(v_1\)</span> part of <span class="math inline">\(\mathbf{v}\)</span> points purely along the first axis, the <span class="math inline">\(v_2\)</span> part purely along the second, and the same for <span class="math inline">\(\mathbf{w}\)</span>. To ask how much of <span class="math inline">\(\mathbf{v}\)</span> falls along <span class="math inline">\(\mathbf{w}\)</span>, we add up the contributions piece by piece, and by the two facts above, only the matching pieces survive.</p>
+<div id="fig-cross-terms" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cross-terms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-03-cross-terms.svg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cross-terms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Each vector splits into an along-first-axis piece and an along-second-axis piece. Matching pieces line up and contribute; the crossing pair sits at a right angle and contributes nothing.
+</figcaption>
+</figure>
+</div>
+<p>First axis meets first axis, and those align, so they contribute <span class="math inline">\(v_1 w_1\)</span>. Second meets second, contributing <span class="math inline">\(v_2 w_2\)</span>. First axis meets second axis sits at a right angle and contributes nothing. The crossing terms vanish, and what remains is a sum of matching products:</p>
+<p><span class="math display">\[
+\mathbf{v} \cdot \mathbf{w} = v_1 w_1 + v_2 w_2
+\]</span></p>
+<p>That is the <strong>dot product</strong>. Multiply the numbers in matching slots and add the results. The little dot is the whole notation. It takes two vectors and returns a single number, and that number is the shadow relationship from the picture, now written purely in the lists the machine holds.</p>
+<p>It is the same slot-by-slot pattern as length and addition, and like them it does not care how long the lists are. Three hundred numbers means three hundred products summed into one:</p>
+<p><span class="math display">\[
+\mathbf{v} \cdot \mathbf{w} = v_1 w_1 + v_2 w_2 + \cdots + v_n w_n
+\]</span></p>
+</section>
+<section id="what-the-dot-product-contains" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="what-the-dot-product-contains">What the dot product contains</h2>
+<p>Before we open it up, one thing needs saying plainly, because it is the weld holding this whole chapter together. We built the dot product two ways and have not yet admitted they are the same thing. One way was a picture: the shadow one arrow casts on another. The other was arithmetic: multiply matching slots and add. These are not two facts about the dot product. They are one number reached by two roads.</p>
+<p>The number you get from multiplying and adding is exactly the length of <span class="math inline">\(\mathbf{w}\)</span> times the length of <span class="math inline">\(\mathbf{v}\)</span>’s shadow on <span class="math inline">\(\mathbf{w}\)</span>. That equality is the bridge. On one side sits arithmetic the machine can run on two lists. On the other sits geometry we can see. The dot product is the single thing standing on both sides at once, which is why one small sum of products can tell us about shadows, lengths, and angles all together.</p>
+<div id="fig-three-views" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-three-views-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-03-three-views.svg" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-three-views-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: One number, three views. The arithmetic (multiply matching slots, add) equals the geometry (how much of one arrow lies along the other, scaled by its length), and stripping the two lengths out of that leaves the angle alone.
+</figcaption>
+</figure>
+</div>
+<p>Read the three faces below as three consequences of that one bridge, not three separate discoveries.</p>
+<p><strong>It contains length.</strong> Take the dot product of a vector with <em>itself</em>. Every slot multiplies by itself, giving <span class="math inline">\(v_1^2 + v_2^2 + \cdots\)</span>, which is exactly what sat under the square root when we measured length. So</p>
+<p><span class="math display">\[
+\mathbf{v} \cdot \mathbf{v} = \lVert \mathbf{v} \rVert^2.
+\]</span></p>
+<p>The dot product of a vector with itself is its length squared. Length was never a separate idea; it was the dot product looking in a mirror.</p>
+<p><strong>It contains the angle.</strong> This is the relation the chapter turns on, tying the arithmetic back to the shadow:</p>
+<p><span class="math display">\[
+\mathbf{v} \cdot \mathbf{w} = \lVert \mathbf{v} \rVert \, \lVert \mathbf{w} \rVert \cos\theta,
+\]</span></p>
+<p>where <span class="math inline">\(\theta\)</span> is the angle between the arrows. It says exactly what the picture warned it would: the dot product is the angle, through <span class="math inline">\(\cos\theta\)</span>, tangled together with both lengths. Not the angle alone, but the angle wearing the two lengths as coats. We will not derive this from scratch here; it is the law of cosines in vector dress, and the derivation waits in the appendix for anyone who wants it. What matters is reading it.</p>
+<div id="fig-sign" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sign-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/01-03-sign.svg" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sign-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4: The same two arrows at three angles. Aligned, the dot product is large and positive. At a right angle it is zero. Pointing apart, it is negative. The sign alone tells the basic story.
+</figcaption>
+</figure>
+</div>
+<p>When the arrows align, <span class="math inline">\(\theta\)</span> is zero, <span class="math inline">\(\cos\theta\)</span> is one, and the dot product is just the two lengths multiplied, as large as it can be. At a right angle, <span class="math inline">\(\cos\theta\)</span> is zero and the whole thing collapses to zero, however long the arrows are. Pointing opposite ways, <span class="math inline">\(\cos\theta\)</span> is <span class="math inline">\(-1\)</span> and the dot product is as negative as it gets. The sign carries the headline: positive means the arrows lean together, zero means perpendicular, negative means they lean apart.</p>
+<p><strong>It contains a test for right angles.</strong> That middle case is the one we will lean on hardest, so it gets its own line. Two vectors are perpendicular exactly when their dot product is zero:</p>
+<p><span class="math display">\[
+\mathbf{v} \cdot \mathbf{w} = 0 \quad \Longleftrightarrow \quad \mathbf{v} \text{ and } \mathbf{w} \text{ are perpendicular.}
+\]</span></p>
+<p>No angle measured, no trigonometry. Multiply the slots, add them, and if the answer is zero the arrows stand at a right angle. It is the cleanest test in linear algebra, and it falls out of a sum of products for free.</p>
+</section>
+<section id="build-it-yourself" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="build-it-yourself">Build it yourself</h2>
+<p>The dot product is a sum of matching products, and that is exactly as short in NumPy as it sounds.</p>
+<p>Start with two vectors and form it by hand, the way the formula reads: multiply matching slots, then add:</p>
+<div id="c0446b62" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">2.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">3.0</span>])</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> v <span class="op">*</span> w</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(products)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(products))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[2. 3.]
+5.0</code></pre>
+</div>
+</div>
+<p><code>v * w</code> multiplies slot by slot, giving <code>[2.0, 3.0]</code>, and summing those gives <code>5.0</code>. That is <span class="math inline">\(2\cdot1 + 1\cdot3\)</span>, the dot product spelled out in two steps. NumPy also has it as one built-in:</p>
+<div id="d924c303" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.dot(v, w))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5.0</code></pre>
+</div>
+</div>
+<p>Same <code>5.0</code>. <code>np.dot</code> multiplies the matching slots and adds them, nothing more, exactly what we did above.</p>
+<p>Now let us confirm the three faces from the last section, in code, one at a time.</p>
+<p><strong>Length.</strong> The dot product of a vector with itself should be its length squared:</p>
+<div id="bb13b262" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.dot(v, v))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.linalg.norm(v) <span class="op">**</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5.0
+5.000000000000001</code></pre>
+</div>
+</div>
+<p>Both give <code>5.0</code>. The self-dot and the squared length are the same number, as promised.</p>
+<p><strong>The right-angle test.</strong> Two perpendicular vectors should give a dot product of zero. Take <span class="math inline">\([1, 0]\)</span> and <span class="math inline">\([0, 1]\)</span>, which point straight along the two axes:</p>
+<div id="b1c491b5" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">0.0</span>])</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.array([<span class="fl">0.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.dot(a, b))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+<p>Zero, with no angle measured and no trigonometry. The sum of products came out to zero on its own, and that is the whole test.</p>
+<p><strong>The angle.</strong> We can run the tangled relation backwards to pull the actual angle out. Since <span class="math inline">\(\mathbf{v} \cdot \mathbf{w} = \lVert \mathbf{v} \rVert \lVert \mathbf{w} \rVert \cos\theta\)</span>, we divide the dot product by the two lengths to get <span class="math inline">\(\cos\theta\)</span>, then undo the cosine:</p>
+<div id="11237985" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cos_theta <span class="op">=</span> np.dot(v, w) <span class="op">/</span> (np.linalg.norm(v) <span class="op">*</span> np.linalg.norm(w))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.arccos(cos_theta)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cos_theta)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.degrees(theta))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.7071067811865475
+45.00000000000001</code></pre>
+</div>
+</div>
+<p>The angle between <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{w}\)</span> comes out to about 45 degrees. Notice what we did: dividing by the two lengths stripped the coats off, leaving <span class="math inline">\(\cos\theta\)</span> alone, and <code>arccos</code> turned that back into an angle. Separating the angle from the lengths, which sounded abstract in the last section, is three lines of arithmetic.</p>
+<p>And, as ever, none of this depended on the vectors being short. What is worth noticing here is not just that the dot product survives three hundred numbers, but that all three faces survive together. <code>np.dot</code> still sums the products, the self-dot is still the length squared, the zero test still finds a right angle, and the angle still separates out, all from the same one line, all in a space no one can picture. One operation carried the whole toolkit up there at once.</p>
+</section>
+<section id="where-it-lives-in-ml" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="where-it-lives-in-ml">Where it lives in ML</h2>
+<p>We can finally answer the question we opened the book with. How does a machine know two songs are similar? It takes their two vectors and computes one dot product, then divides out the two lengths. What is left is <span class="math inline">\(\cos\theta\)</span>, a single number between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span> that says how nearly the two arrows point the same way. Close to <span class="math inline">\(1\)</span>, nearly aligned, nearly the same song. Close to <span class="math inline">\(0\)</span>, unrelated. Below zero, opposite. That number has a name, <strong>cosine similarity</strong>, and it is the dot product with the lengths stripped off, exactly the move we made three lines into the last section.</p>
+<p><span class="math display">\[
+\text{cosine similarity} = \frac{\mathbf{v} \cdot \mathbf{w}}{\lVert \mathbf{v} \rVert \, \lVert \mathbf{w} \rVert} = \cos\theta
+\]</span></p>
+<p>Dividing the lengths out is not a technicality. It is the whole reason cosine similarity is used instead of the raw dot product. Remember the loud-song problem from the first chapter: a track that is loud on every measure has a long vector, and a raw dot product rewards it for being long, not for being similar. Stripping the lengths cancels that. Two songs count as similar when they point the same way, whatever their volumes, which is what we wanted “similar” to mean all along. The angle is the honest measure; the length was never the point.</p>
+<p>This one operation, dot product then normalise, is not a music trick. It is how similarity is measured almost everywhere in machine learning.</p>
+<p>Search runs on it. Your query becomes a vector, every document becomes a vector, and the engine returns the documents whose vectors point most nearly the same way as your query’s. “Relevant” means small angle.</p>
+<p>Recommendation runs on it. Your taste is a vector, every item is a vector, and what gets recommended is whatever points your way. The whole idea of “people like you liked this” is a search for small angles in a space of vectors.</p>
+<p>Retrieval in modern language systems runs on it. When a model needs to find the passage most relevant to a question, it embeds both as vectors and ranks by cosine similarity. The reason a chatbot can pull the right paragraph out of a thousand-page manual is a great many dot products, each one a sum of matching products.</p>
+<p>And then there is attention, the operation at the heart of the models behind the current wave of AI. A model reading a sentence needs to decide, for each word, which other words matter to it. It does this by giving every word two vectors, a query and a key, and taking the dot product of one word’s query with every other word’s key. A large dot product means “this word is relevant to that one, attend to it.” That is the entire mechanism in one line: relevance is a dot product, and the model steers its attention by where those products come out large. The operation you just built from a shadow on the floor is, run billions of times, most of what a transformer does when it reads.</p>
+<p>Now the failure, and in this chapter it is loud rather than quiet, because it is the one that breaks recommendation systems in practice. The dot product only means “similarity” when the slots line up. If document vectors and query vectors were built by different recipes, so that slot 7 means one thing in one and something else in the other, the dot product still returns a number, confidently, and the number is noise. Everything in this chapter assumed both vectors live in the same space with the same meaning in every slot. Break that assumption and the arithmetic keeps working while the meaning quietly drains out, which is the hardest kind of bug to see: the one that never raises an error.</p>
+</section>
+<section id="common-misunderstandings" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="common-misunderstandings">Common misunderstandings</h2>
+<p>The dot product is simple to compute and easy to misread. These are the misreadings worth heading off.</p>
+<p><strong>The dot product is not vector multiplication.</strong> It is tempting to see <span class="math inline">\(\mathbf{v} \cdot \mathbf{w}\)</span> as “multiplying two vectors,” the way we multiply two numbers. It is not, and the giveaway is the output. Multiply two numbers and you get a number. Multiply two vectors slot by slot, with <code>v * w</code>, and you get a <em>vector</em>, the list of matching products. The dot product takes that vector and adds its entries, collapsing it to a single number. So the dot product is not multiplication; it is multiplication <em>followed by adding up</em>, and that final sum is what changes its character entirely. Watch for this in code especially: <code>v * w</code> and <code>np.dot(v, w)</code> are different operations, one returning a vector and one a number, and reaching for the wrong one is a common bug.</p>
+<p><strong>A dot product of zero does not mean “unrelated” in meaning.</strong> We built the clean fact that a zero dot product means the arrows are perpendicular. It is easy to slide from “perpendicular” to “nothing to do with each other,” but those are not the same claim. Perpendicular is a statement about direction in the vector space, nothing more. Two word vectors might come out perpendicular, dot product zero, and still be deeply related in meaning in ways the particular vectors simply do not capture. The dot product reports on the geometry we built, faithfully. Whether that geometry captures the meaning we care about is a separate question, and a much harder one.</p>
+<p><strong>Stripping the lengths is not always what you want.</strong> Cosine similarity divides out both lengths to get the pure angle, and for comparing songs or documents that is right, because length was contaminating the answer. But the length is not always noise. Sometimes how <em>much</em> of something there is genuinely matters, and throwing the lengths away throws real information away with them. Cosine similarity is the right tool when direction is what carries meaning and size does not. Deciding which of those you are in is a judgement about your data, not something the formula makes for you.</p>
+<p><strong><code>arccos</code> can hand you a <code>nan</code>.</strong> When you recover an angle by dividing the dot product by the two lengths and calling <code>arccos</code>, the arithmetic can bite. In exact maths, <span class="math inline">\(\cos\theta\)</span> for two vectors always lands between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span>. In floating point it can drift a hair outside that range from rounding alone, and the drift goes either way. Take a vector, scale it to length one, and dot it with itself. The true answer is exactly one, a vector makes a zero angle with itself, but the machine does not always land exactly there:</p>
+<div id="f65c6167" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> u <span class="op">/</span> np.linalg.norm(u)          <span class="co"># scale to length 1</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>cos_theta <span class="op">=</span> np.dot(u, u)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cos_theta)                    <span class="co"># 1.0000000000000002, just over the limit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.0000000000000002</code></pre>
+</div>
+</div>
+<p>That last digit is the whole problem. Feed a value above one to <code>arccos</code>, which is undefined there, and it does not raise an error. It returns <code>nan</code>, the quiet not-a-number that then poisons everything downstream:</p>
+<div id="3288dc35" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.arccos(cos_theta))         <span class="co"># nan</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nan</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_28498/334907105.py:1: RuntimeWarning: invalid value encountered in arccos
+  print(np.arccos(cos_theta))         # nan</code></pre>
+</div>
+</div>
+<p>This is the same approximate-arithmetic issue from the first chapter, surfacing in a new place. The standard guard is to clip the value back into range before taking the inverse cosine:</p>
+<div id="885314ff" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.arccos(np.clip(cos_theta, <span class="op">-</span><span class="fl">1.0</span>, <span class="fl">1.0</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.degrees(theta))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+<p>Clipping forces the value back to exactly one before <code>arccos</code> sees it, and the angle comes out as zero, which is correct. Reach for <code>np.clip</code> any time you feed a computed cosine into <code>arccos</code>.</p>
+</section>
+<section id="check-your-intuition" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="check-your-intuition">Check your intuition</h2>
+<p>Try each before opening the answers. As always, these ask you to use the dot product, not recite it.</p>
+<p><strong>1.</strong> Compute <span class="math inline">\(\mathbf{v} \cdot \mathbf{w}\)</span> for <span class="math inline">\(\mathbf{v} = [3, 0]\)</span> and <span class="math inline">\(\mathbf{w} = [0, 5]\)</span>. What does the answer tell you about the angle between them, without computing the angle?</p>
+<p><strong>2.</strong> Two vectors have a positive dot product. Then we replace <span class="math inline">\(\mathbf{w}\)</span> with <span class="math inline">\(-\mathbf{w}\)</span>. What is the sign of the new dot product, and what has happened to the angle?</p>
+<p><strong>3.</strong> We have <span class="math inline">\(\mathbf{v} = [1, 1]\)</span> and <span class="math inline">\(\mathbf{w} = [3, 3]\)</span>. Compute the dot product, and compute the cosine similarity. Why is one of these large and the other exactly <span class="math inline">\(1\)</span>?</p>
+<p><strong>4.</strong> Without computing anything, which pair is more similar in direction: two vectors with a dot product of <span class="math inline">\(50\)</span>, or two vectors with a dot product of <span class="math inline">\(10\)</span>?</p>
+<p><strong>5.</strong> A vector’s dot product with itself is <span class="math inline">\(0\)</span>. What can you say about the vector?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> The dot product is <span class="math inline">\(3\cdot0 + 0\cdot5 = 0\)</span>. A zero dot product means the two arrows are perpendicular, so they sit at a right angle, without our measuring any angle to find out. This matches the picture: <span class="math inline">\([3, 0]\)</span> points along the first axis and <span class="math inline">\([0, 5]\)</span> straight up the second, and the axes meet at a right angle.</p>
+<p><strong>2.</strong> Flipping <span class="math inline">\(\mathbf{w}\)</span> to <span class="math inline">\(-\mathbf{w}\)</span> negates every slot, so every product in the sum flips sign, and the dot product flips from positive to negative. Geometrically, reversing <span class="math inline">\(\mathbf{w}\)</span> swings it to point the opposite way, which opens the angle past a right angle: two arrows that leaned together now lean apart. Positive to negative is exactly the crossing from acute to obtuse.</p>
+<p><strong>3.</strong> The dot product is <span class="math inline">\(1\cdot3 + 1\cdot3 = 6\)</span>. The cosine similarity divides that by the two lengths: <span class="math inline">\(\lVert\mathbf{v}\rVert = \sqrt{2}\)</span> and <span class="math inline">\(\lVert\mathbf{w}\rVert = \sqrt{18}\)</span>, so the similarity is <span class="math inline">\(6 / (\sqrt{2}\cdot\sqrt{18}) = 6/6 = 1\)</span>. The dot product is large partly because <span class="math inline">\(\mathbf{w}\)</span> is long, three times the length of <span class="math inline">\(\mathbf{v}\)</span>. Cosine similarity strips that length away and reports pure direction, and since <span class="math inline">\(\mathbf{w}\)</span> is just <span class="math inline">\(\mathbf{v}\)</span> scaled up, the two point in exactly the same direction: similarity <span class="math inline">\(1\)</span>. This is the loud-song problem in miniature. The raw dot product is inflated by length; the cosine sees only direction.</p>
+<p><strong>4.</strong> You cannot tell. The raw dot product mixes direction together with both lengths, so a dot product of <span class="math inline">\(50\)</span> might come from two barely-aligned but very long vectors, while a <span class="math inline">\(10\)</span> might come from two short vectors pointing almost exactly the same way. Without dividing out the lengths, the raw number does not rank similarity. This is precisely why cosine similarity exists, and why the question has no answer as asked.</p>
+<p><strong>5.</strong> The dot product of a vector with itself is its length squared, so if that is zero, the vector has length zero. The only vector with length zero is the zero vector, all slots zero. It is the same exception we met when normalising: the one vector that is its own perpendicular, because it has no direction at all.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/01-02-adding-scaling.html" class="pagination-link" aria-label="Adding, Scaling, and Span">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Adding, Scaling, and Span</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/01-04-norms.html" class="pagination-link" aria-label="Length, Distance, and Norms">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Length, Distance, and Norms</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/yulangalagoda/nothing-is-magic/edit/main/chapters/01-03-dot-product.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/yulangalagoda/nothing-is-magic/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

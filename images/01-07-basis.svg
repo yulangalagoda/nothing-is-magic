@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 260" font-family="Georgia, serif">
+  <defs>
+    <marker id="bsink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#141414"/>
+    </marker>
+    <marker id="bspine" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B5E43"/>
+    </marker>
+    <pattern id="bsgrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#dcdcdc" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="460" height="260" fill="url(#bsgrid)"/>
+
+  <!-- LEFT: standard basis -->
+  <text x="115" y="30" font-size="12" fill="#4a4a4a" text-anchor="middle">the standard basis</text>
+  <circle cx="70" cy="200" r="3" fill="#141414"/>
+  <line x1="70" y1="200" x2="140" y2="200" stroke="#141414" stroke-width="2.4" marker-end="url(#bsink)"/>
+  <line x1="70" y1="200" x2="70" y2="130" stroke="#1B5E43" stroke-width="2.4" marker-end="url(#bspine)"/>
+
+  <!-- RIGHT: another basis, two skew vectors -->
+  <text x="345" y="30" font-size="12" fill="#4a4a4a" text-anchor="middle">another, just as good</text>
+  <circle cx="320" cy="200" r="3" fill="#141414"/>
+  <line x1="320" y1="200" x2="400" y2="175" stroke="#141414" stroke-width="2.4" marker-end="url(#bsink)"/>
+  <line x1="320" y1="200" x2="360" y2="120" stroke="#1B5E43" stroke-width="2.4" marker-end="url(#bspine)"/>
+</svg>
