@@ -8,7 +8,7 @@ picture that makes it feel inevitable, every major idea is implemented from
 scratch in plain NumPy, and every concept is tied back to where it actually
 lives in machine learning.
 
-**Read it online: **
+**Read it online: https://yulangalagoda.github.io/nothing-is-magic/**
 
 ## Status
 
